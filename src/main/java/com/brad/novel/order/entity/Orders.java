@@ -1,13 +1,12 @@
 package com.brad.novel.order.entity;
 
 import com.brad.novel.base.BaseEntity;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.cglib.core.Local;
 
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity

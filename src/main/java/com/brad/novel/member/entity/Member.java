@@ -2,8 +2,6 @@ package com.brad.novel.member.entity;
 
 import com.brad.novel.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +40,10 @@ public class Member extends BaseEntity {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_AUTHOR"));
         }
         return grantedAuthorities;
+    }
+
+    public void addNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }
