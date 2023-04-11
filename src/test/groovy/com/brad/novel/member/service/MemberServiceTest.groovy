@@ -1,7 +1,6 @@
 package com.brad.novel.member.service
 
 import com.brad.novel.member.dto.MemberJoinRequestDto
-import com.brad.security.service.CustomUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -17,8 +16,6 @@ class MemberServiceTest extends Specification {
     MemberService memberService;
     @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
 
     def "회원가입 확인"() {
         setup:

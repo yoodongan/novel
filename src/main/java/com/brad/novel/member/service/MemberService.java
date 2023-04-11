@@ -3,9 +3,10 @@ package com.brad.novel.member.service;
 import com.brad.novel.member.dto.AuthorResponse;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
+import com.brad.novel.member.exception.AlreadyJoinException;
 import com.brad.novel.member.exception.MemberNotFoundException;
 import com.brad.novel.member.repository.MemberRepository;
-import com.brad.security.dto.MemberContext;
+import com.brad.novel.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +27,10 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public String join(MemberJoinRequestDto memberJoinRequestDto) {
-
+        Optional<Member> oMember = memberRepository.findByName(memberJoinRequestDto.getName());
+        if (oMember.isPresent()) {
+            throw new AlreadyJoinException("동일한 이름으로 가입했습니다!");
+        }
         Member member = Member.builder()
                 .name(memberJoinRequestDto.getName())
                 .password(passwordEncoder.encode(memberJoinRequestDto.getPassword()))
