@@ -1,4 +1,4 @@
-package com.brad.security.dto;
+package com.brad.novel.security.dto;
 
 import com.brad.novel.member.entity.Member;
 import lombok.Getter;

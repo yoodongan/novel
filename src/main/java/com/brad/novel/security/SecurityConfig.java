@@ -1,8 +1,7 @@
-package com.brad.security;
+package com.brad.novel.security;
 
-import com.brad.security.handler.CustomLoginSuccessHandler;
+import com.brad.novel.security.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +17,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .authorizeHttpRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().permitAll();
+        http
+                .csrf().disable()
+                .httpBasic().disable()
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(null)
+                )
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/member/login")
@@ -29,6 +37,8 @@ public class SecurityConfig {
                         logout -> logout
                                 .logoutUrl("/member/logout")
                 );
+
+                
         return http.build();
     }
     @Bean

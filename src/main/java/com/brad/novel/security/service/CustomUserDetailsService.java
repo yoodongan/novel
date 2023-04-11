@@ -1,8 +1,8 @@
-package com.brad.security.service;
+package com.brad.novel.security.service;
 
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.repository.MemberRepository;
-import com.brad.security.dto.MemberContext;
+import com.brad.novel.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

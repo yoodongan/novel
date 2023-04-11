@@ -1,4 +1,4 @@
-package com.brad.security.handler;
+package com.brad.novel.security.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +14,6 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // 인증이 성공한 경우 아래 로직 수행
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        response.sendRedirect("/home");
+        response.sendRedirect("/");
     }
 }
