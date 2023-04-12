@@ -26,9 +26,9 @@ public class InitService {
         em.persist(novel2);
         em.persist(novel3);
 
-        Preference preference = new Preference(member, novel, 4, 3);
-        Preference preference2 = new Preference(member, novel2, 2, 2);
-        Preference preference3 = new Preference(member, novel3, 6, 4);
+        Preference preference = new Preference(member, novel, 4L, 3L);
+        Preference preference2 = new Preference(member, novel2, 2L, 2L);
+        Preference preference3 = new Preference(member, novel3, 6L, 4L);
         em.persist(preference);
         em.persist(preference2);
         em.persist(preference3);
