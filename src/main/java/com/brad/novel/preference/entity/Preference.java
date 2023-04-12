@@ -26,5 +26,4 @@ public class Preference extends BaseEntity {
 
     private int recentCh;  // 가장 마지막으로 읽은 화
     private int likeNumber;      // 좋아요(선호) 개수
-    private int lashCh;   // 마지막화
 }
