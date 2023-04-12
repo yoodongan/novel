@@ -15,4 +15,9 @@ import javax.persistence.Entity;
 @ToString(callSuper = true)
 public class Category extends BaseEntity {
     private String name;
+
+    public void addName(String name) {
+        this.name = name;
+    }
+
 }
