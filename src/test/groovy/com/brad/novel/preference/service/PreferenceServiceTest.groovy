@@ -1,8 +1,10 @@
 package com.brad.novel.preference.service
 
+import com.brad.novel.common.response.DataResponse
 import com.brad.novel.init.InitService
 import com.brad.novel.member.service.MemberService
 import com.brad.novel.novel.dto.NovelResponseDto
+import com.brad.novel.preference.dto.BestPreferenceDto
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -41,6 +43,15 @@ class PreferenceServiceTest extends Specification {
             System.println(n.subject)
         }
         novels.size() == 2
+    }
+
+    def "베스트 선호작 리스팅"() {
+        setup:
+        when:
+        DataResponse bestPreferencePerHour = preferenceService.getBestPreferencePerHour();
+        then:
+        List<BestPreferenceDto> bestPreferenceDtos = bestPreferencePerHour.data
+        bestPreferenceDtos.get(0).getLikeNumber()==4
     }
 
 }
