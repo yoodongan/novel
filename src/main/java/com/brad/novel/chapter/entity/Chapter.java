@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -21,10 +22,15 @@ public class Chapter extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Novel novel;
 
+    private Integer chapterSeq;  // 몇 화인지
     private String subject;
 
-    private String shorts;
-    private String content;
+    @Column(columnDefinition = "TEXT")
+    private String shorts;  // 줄거리
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;  // 실제 내용
+
     private String imagePath;
-    private int price;
+    private Integer price;
 }
