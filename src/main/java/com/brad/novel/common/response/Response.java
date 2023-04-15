@@ -2,8 +2,10 @@ package com.brad.novel.common.response;
 
 import com.brad.novel.common.error.ResponseCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Response {
     private String code;
 

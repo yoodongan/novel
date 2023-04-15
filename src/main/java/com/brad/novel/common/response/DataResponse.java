@@ -3,10 +3,12 @@ package com.brad.novel.common.response;
 import com.brad.novel.common.error.ResponseCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString(callSuper = true)
 @Getter
+@NoArgsConstructor
 public class DataResponse<T> extends Response {
     @JsonProperty(value = "data")
     private T data;
