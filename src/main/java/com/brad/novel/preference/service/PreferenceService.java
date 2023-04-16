@@ -27,8 +27,8 @@ public class PreferenceService {
     private final PreferenceRepository preferenceRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public DataResponse getPreferenceNovel(Member member, int likeNumber) {
-        List<Preference> preferences = preferenceRepository.findByMemberAndLikeNumberGreaterThan(member, likeNumber);
+    public DataResponse getPreferenceNovel(Long memberId, Long likeNumber) {
+        List<Preference> preferences = preferenceRepository.findByMemberIdAndLikeNumberGreaterThan(memberId, likeNumber);
         List<Novel> novels = preferences.stream().map(Preference::getNovel).collect(Collectors.toList());
         List<NovelResponseDto> collect = novels.stream()
                 .map((novel) -> NovelResponseDto.of(novel))

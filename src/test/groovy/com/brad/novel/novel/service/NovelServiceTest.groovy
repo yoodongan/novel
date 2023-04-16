@@ -36,7 +36,7 @@ class NovelServiceTest extends Specification {
     def "소설 저장"() {
         setup:
         def novelRequestDto = new NovelRequestDto()
-        novelRequestDto.subject = "소설A"
+        novelRequestDto.subject = "소설ABC"
         novelRequestDto.genre = "스릴러"
         novelRequestDto.description = "이것은 스릴러 장르로, 마지막에 반전이 숨겨진 흥미진진한 소설입니다."
         novelRequestDto.authorName = "작가A"

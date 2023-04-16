@@ -9,7 +9,6 @@ import javax.persistence.Column;
 @Data
 @Builder
 public class NovelResponseDto {
-    private Long id;
     private String subject;
     private String genre;
     private String authorName;

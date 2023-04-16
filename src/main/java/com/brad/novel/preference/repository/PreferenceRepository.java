@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PreferenceRepository extends JpaRepository<Preference, Long> {
 
-    List<Preference> findByMemberAndLikeNumberGreaterThan(Member member, int likeNumber);
+    List<Preference> findByMemberIdAndLikeNumberGreaterThan(Long memberId, Long likeNumber);
 
     @Query("select n.id, sum(p.likeNumber) AS likeN from Preference p " +
             "join p.member m " +
