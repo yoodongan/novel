@@ -1,15 +1,19 @@
 package com.brad.novel.chapter.service;
 
 import com.brad.novel.chapter.dto.ChapterRequestDto;
+import com.brad.novel.chapter.dto.ChapterShortResponseDto;
 import com.brad.novel.chapter.entity.Chapter;
 import com.brad.novel.chapter.exception.ChapterAlreadyException;
 import com.brad.novel.chapter.repository.ChapterRepository;
+import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.novel.entity.Novel;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,4 +37,15 @@ public class ChapterService {
     public Chapter findBySubject(String subject) {
         return chapterRepository.findBySubject(subject).orElseThrow(() -> new ChapterAlreadyException("이미 등록된 챕터명입니다!"));
     }
+
+    public DataResponse findAllChapter(Novel novel) {
+        List<Chapter> findChapters = chapterRepository.findAllByNovel(novel);
+        List<ChapterShortResponseDto> chapterShorts = findChapters.stream()
+                .map(ChapterShortResponseDto::new)
+                .collect(Collectors.toList());
+
+        return DataResponse.success(chapterShorts);
+    }
+
+
 }
