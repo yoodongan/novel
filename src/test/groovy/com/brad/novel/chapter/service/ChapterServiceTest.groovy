@@ -1,6 +1,8 @@
 package com.brad.novel.chapter.service
 
 import com.brad.novel.chapter.dto.ChapterRequestDto
+import com.brad.novel.chapter.dto.ChapterShortResponseDto
+import com.brad.novel.common.response.DataResponse
 import com.brad.novel.init.InitService
 import com.brad.novel.member.service.MemberService
 import com.brad.novel.novel.service.NovelService
@@ -40,5 +42,17 @@ class ChapterServiceTest extends Specification {
         then:
         def findChap = chapterService.findBySubject("소설1-1화의 제목입니다.");
         findChap.subject == "소설1-1화의 제목입니다."
+    }
+
+    def "소설 편 당 조회"() {
+        setup:
+        def novel = novelService.findById(1L);
+
+        when:
+        DataResponse chapters = chapterService.findAllChapter(novel)
+        List<ChapterShortResponseDto> chapterShorts = chapters.data
+
+        then:
+        chapterShorts.size() == 4
     }
 }
