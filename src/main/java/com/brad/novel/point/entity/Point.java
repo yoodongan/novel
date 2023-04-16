@@ -2,6 +2,7 @@ package com.brad.novel.point.entity;
 
 import com.brad.novel.base.BaseEntity;
 import com.brad.novel.member.entity.Member;
+import com.brad.novel.point.exception.NoPointException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,12 @@ public class Point extends BaseEntity {
         point.preventDupId = genPreventDupId(point, String.valueOf(LocalDateTime.now()));
         point.amount = amount;
         return point;
+    }
+    public void updatePoint(Long minus) {
+        if(amount - minus < 0) {
+            throw new NoPointException("잔여 포인트가 부족합니다.");
+        } else {
+            amount -= minus;
+        }
     }
 }
