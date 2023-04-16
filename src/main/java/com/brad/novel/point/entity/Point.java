@@ -26,12 +26,12 @@ public class Point extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    private static String genReservationId(Point point, String startTime) {
+    private static String genPreventDupId(Point point, String startTime) {
         return point.getId() + "||" + startTime;
     }
     public static Point create(Long amount, Member member) {
         Point point = new Point();
-        point.preventDupId = genReservationId(point, String.valueOf(LocalDateTime.now()));
+        point.preventDupId = genPreventDupId(point, String.valueOf(LocalDateTime.now()));
         point.amount = amount;
         return point;
     }
