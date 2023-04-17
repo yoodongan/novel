@@ -2,10 +2,8 @@ package com.brad.novel.preference.service;
 
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.global.redis.RedisCacheKey;
-import com.brad.novel.member.entity.Member;
-import com.brad.novel.novel.dto.NovelResponseDto;
-import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.preference.dto.BestPreferenceDto;
+import com.brad.novel.preference.dto.ResultPreferenceDto;
 import com.brad.novel.preference.entity.Preference;
 import com.brad.novel.preference.repository.PreferenceRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +25,12 @@ public class PreferenceService {
     private final PreferenceRepository preferenceRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public DataResponse getPreferenceNovel(Long memberId, Long likeNumber) {
-        List<Preference> preferences = preferenceRepository.findByMemberIdAndLikeNumberGreaterThan(memberId, likeNumber);
-        List<Novel> novels = preferences.stream().map(Preference::getNovel).collect(Collectors.toList());
-        List<NovelResponseDto> collect = novels.stream()
-                .map((novel) -> NovelResponseDto.of(novel))
+    public DataResponse getPreferenceNovel(Long memberId, Integer likeNumber) {
+        List<Preference> preferences = preferenceRepository.findByMemberIdAndLikeNumberOverTwo(memberId, likeNumber);
+        List<ResultPreferenceDto> results = preferences.stream()
+                .map(p -> ResultPreferenceDto.of(p.getNovel(), p.getRecentCh()))
                 .collect(Collectors.toList());
-        return DataResponse.success(collect);
+        return DataResponse.success(results);
     }
 
     @Cacheable(value = RedisCacheKey.PREFERENCE_LIST)
