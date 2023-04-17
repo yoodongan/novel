@@ -28,7 +28,7 @@ public class Novel extends BaseEntity {
     private String genre;
     private String authorName;
 
-    private int lastCh;   // 마지막화
+    private Integer lastCh;   // 마지막화
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;

@@ -47,12 +47,12 @@ public class MemberService {
         return optionalMember.orElseThrow(() -> new MemberNotFoundException("일치하는 회원명이 없습니다!"));
     }
 
-    public AuthorResponse beAuthor(Member member, String nickname) {
+    public AuthorResponse beAuthor(Long memberId, String nickname) {
         Optional<Member> oMember = memberRepository.findByNickname(nickname);
         if (oMember.isPresent()) {
             return new AuthorResponse("해당 작가명은 사용 중입니다.", nickname);
         }
-        Optional<Member> foMember = memberRepository.findById(member.getId());
+        Optional<Member> foMember = memberRepository.findById(memberId);
         foMember.get().addNickname(nickname);
         memberRepository.save(foMember.get());
         addAuthentication(foMember.get());
