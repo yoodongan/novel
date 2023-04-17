@@ -24,6 +24,6 @@ public class Preference extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Novel novel;
 
-    private Long recentCh;  // 가장 마지막으로 읽은 화
-    private Long likeNumber;      // 좋아요(선호) 개수
+    private Integer recentCh;  // 가장 마지막으로 읽은 화
+    private Integer likeNumber;      // 좋아요(선호) 개수
 }

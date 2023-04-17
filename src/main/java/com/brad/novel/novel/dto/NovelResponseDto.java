@@ -10,6 +10,7 @@ import javax.persistence.Column;
 @Builder
 public class NovelResponseDto {
     private String subject;
+    private Integer lastCh;
     private String genre;
     private String authorName;
 
@@ -21,6 +22,7 @@ public class NovelResponseDto {
     public static NovelResponseDto of(Novel novel) {
         return NovelResponseDto.builder()
                 .subject(novel.getSubject())
+                .lastCh(novel.getLastCh())
                 .genre(novel.getGenre())
                 .authorName(novel.getAuthorName())
                 .description(novel.getDescription())

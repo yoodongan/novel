@@ -12,7 +12,7 @@ public class PreferenceApiController {
 
     /* 유저 별 선호한 작품 목록 조회 */
     @GetMapping("/preference/{memberId}")
-    public DataResponse getPreference(@PathVariable Long memberId, @RequestParam Long likeNumber) {
+    public DataResponse getPreference(@PathVariable Long memberId, @RequestParam Integer likeNumber) {
         return preferenceService.getPreferenceNovel(memberId, likeNumber);
     }
 
