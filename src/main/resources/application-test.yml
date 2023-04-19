@@ -1,0 +1,25 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 12341234
+    url: jdbc:mysql://localhost:3306/test2
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        hbm2ddl:
+          auto: update
+  sql:
+    init:
+      data-locations: classpath:db/mysql/data.sql
+      mode: always
+logging:
+  level:
+    root: info
+    com.brad.novel: debug
