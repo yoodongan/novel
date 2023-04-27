@@ -1,5 +1,6 @@
 package com.brad.novel.novel.api;
 
+import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.novel.dto.NovelRequestDto;
 import com.brad.novel.novel.dto.NovelResponseDto;
@@ -22,7 +23,7 @@ public class NovelApiController {
         Long novelId = novelService.save(novelRequestDto);
         Novel findNovel = novelService.findById(novelId);
         NovelResponseDto novelResponseDto = NovelResponseDto.of(findNovel);
-        return DataResponse.success(novelResponseDto);
+        return DataResponse.success(ResponseCode.SUCCESS_201, novelResponseDto);
     }
 
 }
