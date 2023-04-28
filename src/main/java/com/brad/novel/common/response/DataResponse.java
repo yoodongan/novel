@@ -12,11 +12,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DataResponse<T> {
+    private ResponseCode responseCode;
     @JsonProperty(value = "data")
     private T data;
 
     public DataResponse(ResponseCode responseCode, T data) {
-        super();
+        this.responseCode = responseCode;
         this.data = data;
     }
     public static <T> DataResponse<T> success(ResponseCode responseCode, T data){
