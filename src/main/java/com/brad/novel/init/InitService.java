@@ -1,7 +1,9 @@
 package com.brad.novel.init;
 
 import com.brad.novel.chapter.entity.Chapter;
+import com.brad.novel.member.dto.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
+import com.brad.novel.member.service.MemberService;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.preference.entity.Preference;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,12 @@ import javax.persistence.EntityManager;
 @RequiredArgsConstructor
 public class InitService {
     private final EntityManager em;
+    private final MemberService memberService;
 
     public void init1() {
-        Member member = new Member("userABC", "12345", 10000L, "authorAA");
-        em.persist(member);
+        MemberJoinRequestDto memberJoinRequestDto = new MemberJoinRequestDto("userABC", "12345");
+        Long memberId = memberService.join(memberJoinRequestDto);
+        Member member = memberService.findById(memberId);
 
         Novel novel = new Novel(member, null, "novelA", "스릴러", "authorAA", 15, "소설A 설명입니다.", null);
         Novel novel2 = new Novel(member, null, "novelB", "로맨스", "authorAA", 15, "소설B 설명입니다.", null);

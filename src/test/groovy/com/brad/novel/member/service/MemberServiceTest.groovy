@@ -2,6 +2,7 @@ package com.brad.novel.member.service
 
 import com.brad.novel.init.InitService
 import com.brad.novel.member.dto.MemberJoinRequestDto
+import com.brad.novel.member.exception.AlreadyJoinException
 import com.brad.novel.preference.service.PreferenceService
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,16 +44,18 @@ class MemberServiceTest extends Specification {
         findMember.name == name
     }
 
-    def "test1"() {
-        given:
-        String hello = "안녕"
-        def sabarada = " sabarada"
+    def "회원명 중복 - 에러"() {
+        setup:
+        def memberJoinRequestDto = new MemberJoinRequestDto("김철수", "1234")
+        def memberJoinRequestDto2 = new MemberJoinRequestDto("김철수", "1234")
 
         when:
-        def result = "안녕 sabarada"
+        memberService.join(memberJoinRequestDto)
+        memberService.join(memberJoinRequestDto2)
 
         then:
-        result == "안녕 sabarada"
+        def e = thrown(AlreadyJoinException.class)
+        e.message == "동일한 이름으로 가입했습니다!"
     }
 
     /*
