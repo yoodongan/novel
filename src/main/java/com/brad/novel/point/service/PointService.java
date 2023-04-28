@@ -1,18 +1,22 @@
 package com.brad.novel.point.service;
 
-import com.brad.novel.common.response.DataResponse;
+import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.member.entity.Member;
-import com.brad.novel.member.service.MemberService;
-import com.brad.novel.point.dto.PointSuccessDto;
+import com.brad.novel.member.repository.MemberRepository;
+import com.brad.novel.point.dto.PointRequestDto;
 import com.brad.novel.point.entity.Point;
-import com.brad.novel.point.exception.PointDuplicatedException;
 import com.brad.novel.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static com.brad.novel.common.error.ResponseCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,27 +24,51 @@ import java.util.Optional;
 @Transactional
 public class PointService {
     private final PointRepository pointRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final RedissonClient redissonClient;
 
-    public DataResponse addPoint(Long memberId, Long amount) {
-        Member findMember = memberService.findById(memberId);
-        Point point = Point.create(amount, findMember);
-
-        Optional<Point> oPoint = pointRepository.findByIdLock(point.getPreventDupId());
-        oPoint.ifPresent(p -> {
-            log.error("중복 충전 발생!");
-            throw new PointDuplicatedException("중복 충전 오류 발생!");
-            }
-        );
+    @Transactional
+    public void addPoint(Member member, PointRequestDto requestDto) {
+        String lockName = "charge-point" + " / " + "name: " + member.getName();
+        RLock lock = redissonClient.getLock(lockName);
+        boolean isLocked = false;
         try {
-            Thread.sleep(2000); // 충전 중 (2초 소요)
+            isLocked = lock.tryLock(0, 3, TimeUnit.SECONDS);
+            if (!isLocked) throw new NovelServiceException(NOT_AVAILABLE_LOCK);
+
+            log.info("포인트 충전 중  ... ");
+            Thread.sleep(1000); // 의도적 sleep
+
+            Member findMember = memberRepository.findById(member.getId()).orElseThrow(
+                    () -> new NovelServiceException(NOT_FOUND_MEMBER)
+            );
+            if (findMember == null) {
+                throw new NovelServiceException(NOT_FOUND_MEMBER);
+            }
+
+            findMember.addPoint(requestDto.getAmount());
+            log.info("포인트 충전 완료");
+
         } catch (InterruptedException e) {
-            throw new IllegalStateException("충전 에러 발생!");
+            log.error("에러 발생 {} ", e.getMessage(), e);
+
+        } finally {
+            if (isLocked) { // 락을 획득했을 때만 unlock 수행
+                log.info("(unlock 수행)");
+                lock.unlock();
+            }
         }
-        pointRepository.save(point);
-        PointSuccessDto pointSuccessDto = new PointSuccessDto(memberId, amount);
-        return DataResponse.success(pointSuccessDto);
     }
+    /*
+    @Transactional
+    public void addPointWithoutLock(Member member, PointRequestDto requestDto) {
+
+        Member findMember = memberRepository.findById(member.getId()).orElseThrow(
+                () -> new NovelServiceException(NOT_FOUND_MEMBER)
+        );
+        findMember.addPoint(requestDto.getAmount());
+    }
+    */
 
     public Point findByMemberId(Long memberId) {
         return pointRepository.findByMemberId(memberId).get();
@@ -48,6 +76,10 @@ public class PointService {
     public void updatePoint(Long memberId, Long amount) {
         Point findPoint = findByMemberId(memberId);
         findPoint.updatePoint(amount);
+    }
+
+    public Point findById(Long pointId) {
+        return pointRepository.findById(pointId).orElseThrow(() -> new NovelServiceException(NOT_FOUND_POINT));
     }
 
 }
