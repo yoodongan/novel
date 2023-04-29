@@ -1,10 +1,15 @@
 package com.brad.novel.member.api;
 
-import com.brad.novel.member.dto.AuthorResponse;
-import com.brad.novel.member.dto.JoinResponse;
+import com.brad.novel.common.error.ResponseCode;
+import com.brad.novel.common.response.DataResponse;
+import com.brad.novel.member.dto.AuthorResponseDto;
 import com.brad.novel.member.dto.MemberAuthorDto;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
+import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
+import com.brad.novel.point.dto.PointRequestDto;
+import com.brad.novel.point.dto.PointSuccessDto;
+import com.brad.novel.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +19,32 @@ import javax.validation.Valid;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/member", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/members", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Slf4j
 public class MemberApiController {
     private final MemberService memberService;
+    private final PointService pointService;
 
     @PostMapping("/join")
-    public JoinResponse join(@RequestBody @Valid MemberJoinRequestDto memberJoinRequestDto) {
-        String username = memberService.join(memberJoinRequestDto);
-        return new JoinResponse("회원가입 성공", username);
+    public DataResponse join(@RequestBody @Valid MemberJoinRequestDto memberJoinRequestDto) {
+        Long memberId = memberService.join(memberJoinRequestDto);
+        Member member = memberService.findById(memberId);
+        return new DataResponse(ResponseCode.SUCCESS_201, member.getName());
     }
 
     @PostMapping("/{memberId}/author")
-    public AuthorResponse beAuthor(@PathVariable Long memberId, @RequestBody MemberAuthorDto memberAuthorDto) {
-        return memberService.beAuthor(memberId, memberAuthorDto.getNickname());
+    public DataResponse beAuthor(@PathVariable Long memberId, @RequestBody MemberAuthorDto memberAuthorDto) {
+        memberService.beAuthor(memberId, memberAuthorDto.getNickname());
+        Member findMember = memberService.findById(memberId);
+        return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(findMember.getName(), findMember.getNickname()));
+    }
+
+    @PostMapping("/{memberId}/points")
+    public DataResponse addPoint(@PathVariable Long memberId, PointRequestDto requestDto) {
+        Member member = memberService.findById(memberId);
+        pointService.addPoint(member, requestDto);
+        PointSuccessDto pointSuccessDto = new PointSuccessDto(memberId, requestDto.getAmount());
+        return new DataResponse(ResponseCode.SUCCESS_201, pointSuccessDto);
     }
 }

@@ -1,11 +1,13 @@
 package com.brad.novel.member.service;
 
-import com.brad.novel.member.dto.AuthorResponse;
+import com.brad.novel.common.error.ResponseCode;
+import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.exception.AlreadyJoinException;
 import com.brad.novel.member.exception.MemberNotFoundException;
 import com.brad.novel.member.repository.MemberRepository;
+import com.brad.novel.point.repository.PointRepository;
 import com.brad.novel.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +27,9 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PointRepository pointRepository;
 
-    public String join(MemberJoinRequestDto memberJoinRequestDto) {
+    public Long join(MemberJoinRequestDto memberJoinRequestDto) {
         Optional<Member> oMember = memberRepository.findByName(memberJoinRequestDto.getName());
         if (oMember.isPresent()) {
             throw new AlreadyJoinException("동일한 이름으로 가입했습니다!");
@@ -34,10 +37,11 @@ public class MemberService {
         Member member = Member.builder()
                 .name(memberJoinRequestDto.getName())
                 .password(passwordEncoder.encode(memberJoinRequestDto.getPassword()))
+                .restPoint(0L)
                 .build();
         memberRepository.save(member);
-        return member.getName();
 
+        return member.getId();
     }
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("찾는 회원이 없습니다!"));
@@ -47,17 +51,15 @@ public class MemberService {
         return optionalMember.orElseThrow(() -> new MemberNotFoundException("일치하는 회원명이 없습니다!"));
     }
 
-    public AuthorResponse beAuthor(Long memberId, String nickname) {
+    public void beAuthor(Long memberId, String nickname) {
         Optional<Member> oMember = memberRepository.findByNickname(nickname);
         if (oMember.isPresent()) {
-            return new AuthorResponse("해당 작가명은 사용 중입니다.", nickname);
+            throw new NovelServiceException(ResponseCode.ALREADY_EXIST_NICKNAME);
         }
         Optional<Member> foMember = memberRepository.findById(memberId);
         foMember.get().addNickname(nickname);
         memberRepository.save(foMember.get());
         addAuthentication(foMember.get());
-
-        return new AuthorResponse(nickname +" 작가님 환영합니다", nickname);
     }
 
     private void addAuthentication(Member member) {
