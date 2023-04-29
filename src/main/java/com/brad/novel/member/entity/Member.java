@@ -27,6 +27,8 @@ public class Member extends BaseEntity {
     private String name;
     @JsonIgnore
     private String password;
+
+    @Column
     private Long restPoint;
 
     @Column(unique = true)
@@ -46,4 +48,7 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
+    public void addPoint(Long addPoint) {
+        restPoint += addPoint;
+    }
 }
