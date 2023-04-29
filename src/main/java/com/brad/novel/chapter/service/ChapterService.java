@@ -1,13 +1,12 @@
 package com.brad.novel.chapter.service;
 
 import com.brad.novel.chapter.dto.ChapterOrderRequestDto;
-import com.brad.novel.chapter.dto.ChapterOrderResponseDto;
-import com.brad.novel.chapter.dto.ChapterRequestDto;
-import com.brad.novel.chapter.dto.ChapterShortResponseDto;
+import com.brad.novel.chapter.dto.ChapterSaveRequestDto;
 import com.brad.novel.chapter.entity.Chapter;
 import com.brad.novel.chapter.exception.ChapterAlreadyException;
 import com.brad.novel.chapter.repository.ChapterRepository;
-import com.brad.novel.common.response.DataResponse;
+import com.brad.novel.common.error.ResponseCode;
+import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.global.redis.RedisLockRepository;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.point.entity.Point;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class ChapterService {
     private final RedisLockRepository redisLockRepository;
     private final PointService pointService;
 
-    public Long writeNovel(Novel novel, ChapterRequestDto requestDto) {
+    public Long writeNovel(Novel novel, ChapterSaveRequestDto requestDto) {
         requestDto.setNovel(novel);
         Chapter chapter = modelMapper.map(requestDto, Chapter.class);
 
@@ -47,17 +45,12 @@ public class ChapterService {
         return chapterRepository.findBySubject(subject).orElseThrow(() -> new ChapterAlreadyException("이미 등록된 챕터명입니다!"));
     }
 
-    public DataResponse findAllChapter(Novel novel) {
-        List<Chapter> findChapters = chapterRepository.findAllByNovel(novel);
-        List<ChapterShortResponseDto> chapterShorts = findChapters.stream()
-                .map(ChapterShortResponseDto::new)
-                .collect(Collectors.toList());
-
-        return DataResponse.success(chapterShorts);
+    public List<Chapter> findAllChapters(Novel novel) {
+        return chapterRepository.findAllByNovel(novel);
     }
 
     @Transactional
-    public DataResponse orderOneChapter(final Long memberId, ChapterOrderRequestDto orderDto) throws InterruptedException {
+    public void orderOneChapter(Long memberId, ChapterOrderRequestDto orderDto) throws InterruptedException {
         while (!redisLockRepository.lock(memberId)) {
             Thread.sleep(100);  // 락을 획득하지 못했다면, 대기했다가 또 락 요청.
         }
@@ -68,13 +61,14 @@ public class ChapterService {
             } else {
                 restPoint.updatePoint(orderDto.getPrice());
             }
-            ChapterOrderResponseDto chapterOrderResponseDto = new ChapterOrderResponseDto(orderDto);
-            return DataResponse.success(chapterOrderResponseDto);
+
         } finally {
             redisLockRepository.unlock(memberId);
             // 락 해제
         }
     }
 
-
+    public Chapter findById(Long chapterId) {
+        return chapterRepository.findById(chapterId).orElseThrow(() -> new NovelServiceException(ResponseCode.NOT_FOUND_CHAPTER));
+    }
 }
