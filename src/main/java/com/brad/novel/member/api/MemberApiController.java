@@ -5,6 +5,7 @@ import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.member.dto.AuthorResponseDto;
 import com.brad.novel.member.dto.MemberAuthorDto;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
+import com.brad.novel.member.dto.MemberJoinResponseDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
 import com.brad.novel.point.dto.PointRequestDto;
@@ -30,7 +31,7 @@ public class MemberApiController {
     public DataResponse join(@RequestBody @Valid MemberJoinRequestDto memberJoinRequestDto) {
         Long memberId = memberService.join(memberJoinRequestDto);
         Member member = memberService.findById(memberId);
-        return new DataResponse(ResponseCode.SUCCESS_201, member.getName());
+        return new DataResponse(ResponseCode.SUCCESS_201, new MemberJoinResponseDto(member.getName()));
     }
 
     @PostMapping("/{memberId}/author")
