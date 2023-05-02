@@ -10,15 +10,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
+@RequestMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class NovelApiController {
     private final NovelService novelService;
 
     @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    @PostMapping("/novel")
+    @PostMapping("/novels")
     public DataResponse save(@RequestBody NovelRequestDto novelRequestDto) {
         Long novelId = novelService.save(novelRequestDto);
         Novel findNovel = novelService.findById(novelId);
