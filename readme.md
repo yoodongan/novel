@@ -8,13 +8,13 @@
 ## API 구성
 > Swagger 를 활용해 API 테스트를 진행했다. 다음은 본 프로젝트에서 다룬 대표적 기능들에 대한 API 요청과 응답 결과이다.
 ### 선호작 조회(1시간 간격으로 갱신, 캐싱 사용)
-<img src="img_2.png"  width="500" height="400"/>
+<img src="src/main/resources/img/img_2.png"  width="500" height="400"/>
 
 ### 포인트 중복 충전 요청 (동시성 문제 해결)
-<img src="img_3.png"  width="500" height="400"/>
+<img src="src/main/resources/img/img_3.png"  width="500" height="400"/>
 
 ### 회원 별 선호작 목(해당 회원이 선호하는 작품 목록 조회, N+1 문제 해결)
-<img src="img_4.png"  width="500" height="400"/>
+<img src="src/main/resources/img/img_4.png"  width="500" height="400"/>
 
 
 ## 프로젝트에서 다룬 내용
