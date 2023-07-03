@@ -42,7 +42,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/{memberId}/points")
-    public DataResponse addPoint(@PathVariable Long memberId, PointRequestDto requestDto) {
+    public DataResponse addPoint(@PathVariable Long memberId, @RequestBody PointRequestDto requestDto) {
         Member member = memberService.findById(memberId);
         pointService.addPoint(member, requestDto);
         PointSuccessDto pointSuccessDto = new PointSuccessDto(memberId, requestDto.getAmount());
