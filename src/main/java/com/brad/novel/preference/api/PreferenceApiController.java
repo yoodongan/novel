@@ -6,6 +6,7 @@ import com.brad.novel.preference.dto.BestPreferenceDto;
 import com.brad.novel.preference.dto.ResultPreferenceDto;
 import com.brad.novel.preference.entity.Preference;
 import com.brad.novel.preference.service.PreferenceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@Tag(name = "PreferenceApiController", description = "유저 별 선호한 작품 목록 조회, 베스트 선호 작품 조회(1시간 간격으로 갱신)")
 @RequiredArgsConstructor
 public class PreferenceApiController {
     private final PreferenceService preferenceService;

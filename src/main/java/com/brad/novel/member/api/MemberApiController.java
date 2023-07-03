@@ -11,6 +11,7 @@ import com.brad.novel.member.service.MemberService;
 import com.brad.novel.point.dto.PointRequestDto;
 import com.brad.novel.point.dto.PointSuccessDto;
 import com.brad.novel.point.service.PointService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@Tag(name = "MemberApiController", description = "회원가입, 작가회원 등록, 포인트 충전")
 @RequestMapping(value = "/members", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Slf4j
