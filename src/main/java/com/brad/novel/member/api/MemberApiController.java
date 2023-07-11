@@ -2,10 +2,7 @@ package com.brad.novel.member.api;
 
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
-import com.brad.novel.member.dto.AuthorResponseDto;
-import com.brad.novel.member.dto.MemberAuthorDto;
-import com.brad.novel.member.dto.MemberJoinRequestDto;
-import com.brad.novel.member.dto.MemberJoinResponseDto;
+import com.brad.novel.member.dto.*;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
 import com.brad.novel.point.dto.PointRequestDto;
@@ -16,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -34,6 +32,12 @@ public class MemberApiController {
         Long memberId = memberService.join(memberJoinRequestDto);
         Member member = memberService.findById(memberId);
         return new DataResponse(ResponseCode.SUCCESS_201, new MemberJoinResponseDto(member.getName()));
+    }
+    @PostMapping("/login")
+    public DataResponse login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        String genAccessToken = memberService.genAccessToken(loginRequest.getName(), loginRequest.getPassword());
+        response.addHeader("Authentication", genAccessToken);
+        return new DataResponse(ResponseCode.SUCCESS_201, new MemberLoginResponseDto(loginRequest.getName()));
     }
 
     @PostMapping("/{memberId}/author")

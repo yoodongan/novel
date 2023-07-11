@@ -15,6 +15,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -50,5 +51,12 @@ public class Member extends BaseEntity {
 
     public void addPoint(Long addPoint) {
         restPoint += addPoint;
+    }
+
+    public Map<String, Object> toClaims() {
+        return Map.of(
+                "id", getId(),
+                "name", getName()
+        );
     }
 }

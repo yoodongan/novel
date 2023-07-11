@@ -2,6 +2,7 @@ package com.brad.novel.member.service;
 
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.exception.NovelServiceException;
+import com.brad.novel.global.jwt.JwtProvider;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.exception.AlreadyJoinException;
@@ -28,6 +29,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
+    private final JwtProvider jwtProvider;
 
     public Long join(MemberJoinRequestDto memberJoinRequestDto) {
         Optional<Member> oMember = memberRepository.findByName(memberJoinRequestDto.getName());
@@ -74,5 +76,13 @@ public class MemberService {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+    }
+
+    public String genAccessToken(String name, String password) {
+        Member member = findByName(name);
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            return null;
+        }
+        return jwtProvider.genToken(member.toClaims(), 60 * 60 * 24 * 365);
     }
 }
