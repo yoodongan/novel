@@ -45,7 +45,7 @@ public class ChapterService {
         return chapterRepository.findBySubject(subject).orElseThrow(() -> new ChapterAlreadyException("이미 등록된 챕터명입니다!"));
     }
 
-    public List<Chapter> findAllChapters(Novel novel) {
+    public List<Chapter> findAllChaptersByNovel(Novel novel) {
         return chapterRepository.findAllByNovel(novel);
     }
 

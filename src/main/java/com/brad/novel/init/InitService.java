@@ -48,5 +48,11 @@ public class InitService {
         em.persist(chapter4);
 
     }
+    public void init2() {
+        MemberJoinRequestDto memberJoinRequestDto = new MemberJoinRequestDto("authorABC", "1234");
+        Long memberId = memberService.join(memberJoinRequestDto);
+        Member member = memberService.findById(memberId);
+        member.addNickname("베르나르베르베르");
+    }
 
 }

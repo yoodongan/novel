@@ -15,6 +15,6 @@ public class InitDb {
     @PostConstruct
     public void init() {
         initService.init1();
+        initService.init2();
     }
-
 }

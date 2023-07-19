@@ -37,7 +37,7 @@ public class ChapterApiController {
     @GetMapping("/novels/{novelId}/chapters")
     public DataResponse getAllChapter(@PathVariable Long novelId) {
         Novel findNovel = novelService.findById(novelId);
-        List<Chapter> allChapters = chapterService.findAllChapters(findNovel);
+        List<Chapter> allChapters = chapterService.findAllChaptersByNovel(findNovel);
         List<ChapterShortResponseDto> chapterShorts = allChapters.stream()
                 .map(ChapterShortResponseDto::new)
                 .collect(Collectors.toList());
