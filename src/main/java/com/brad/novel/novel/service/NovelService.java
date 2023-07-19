@@ -1,5 +1,7 @@
 package com.brad.novel.novel.service;
 
+import com.brad.novel.member.entity.Member;
+import com.brad.novel.member.repository.MemberRepository;
 import com.brad.novel.novel.dto.NovelRequestDto;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.exception.NovelFoundException;
@@ -14,9 +16,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class NovelService {
     private final NovelRepository novelRepository;
+    private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
 
-    public Long save(NovelRequestDto novelRequestDto) {
+    public Long save(NovelRequestDto novelRequestDto, String name) {
+        Member member = memberRepository.findByName(name).get();
+        novelRequestDto.setAuthorName(member.getNickname());
+        novelRequestDto.setLastCh(0); // 첫 소설 만들었을 때는, 마지막 챕터가 0이다.
+
         Novel novel = modelMapper.map(novelRequestDto, Novel.class);
         log.info(novel.getSubject());
         novelRepository.save(novel);

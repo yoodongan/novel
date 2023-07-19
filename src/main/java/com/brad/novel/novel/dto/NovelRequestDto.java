@@ -12,10 +12,10 @@ import javax.persistence.Column;
 @AllArgsConstructor
 public class NovelRequestDto {
     private Category category;
-    private String subject;
+    private String subject;  // 소설 제목
     private String genre;
-    private String authorName;
-
+    private String authorName; // 작가명.
+    private Integer lastCh;  // 소설 마지막 화
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
