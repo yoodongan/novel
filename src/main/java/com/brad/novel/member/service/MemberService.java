@@ -60,7 +60,6 @@ public class MemberService {
         }
         Optional<Member> foMember = memberRepository.findById(memberId);
         foMember.get().addNickname(nickname);
-        memberRepository.save(foMember.get());
         addAuthentication(foMember.get());
     }
 

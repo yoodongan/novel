@@ -1,12 +1,12 @@
 package com.brad.novel.member.service
 
-import com.brad.novel.init.InitService
+
 import com.brad.novel.member.dto.MemberJoinRequestDto
 import com.brad.novel.member.exception.AlreadyJoinException
 import com.brad.novel.preference.service.PreferenceService
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
@@ -22,14 +22,6 @@ class MemberServiceTest extends Specification {
     PasswordEncoder passwordEncoder;
     @Autowired
     PreferenceService preferenceService;
-
-    @Autowired
-    InitService initService;
-
-    @BeforeEach
-    def setup1() {
-        initService.init1();
-    }
 
     def "회원가입 확인"() {
         setup:
@@ -58,29 +50,26 @@ class MemberServiceTest extends Specification {
         e.message == "동일한 이름으로 가입했습니다!"
     }
 
-    /*
-    @Rollback(false)
-    @Transactional
-    def "작가명 입력"() {
+    def "작가명 등록 확인, 작가 권한 체크까지 테스트"() {
         setup:
         def nickname = "히가시노게이고"
-        def name = "김철수"
-        def password = "1234"
-        def memberJoinRequestDto = new MemberJoinRequestDto()
-        memberJoinRequestDto.name = name
-        memberJoinRequestDto.password = password
+        def flag = false  // 작가명 권한이 있는지 체크
 
         when:
-        memberService.join(memberJoinRequestDto)
-        def member = memberService.findByName(name)
-        memberService.beAuthor(member, nickname)
+        def member = memberService.findByName("userABC")
+        memberService.beAuthor(1L, nickname)
+        def authentication = SecurityContextHolder.getContext().getAuthentication()
+        def authorities = authentication.getAuthorities()
 
-        def memberContext = customUserDetailsService.loadUserByUsername(name)
         then:
-        memberContext.getAuthorities()
-        println("hello")
+        def findMember = memberService.findByName("userABC")
+        findMember.nickname == "히가시노게이고"
+        for(def a : authorities) {
+            if(a.getAuthority().equals("ROLE_AUTHOR")) {
+                flag = true
+                break
+            }
+        }
+        flag == true
     }
-    */
-//
-
 }
