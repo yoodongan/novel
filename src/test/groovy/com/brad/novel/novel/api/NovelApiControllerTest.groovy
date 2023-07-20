@@ -1,6 +1,5 @@
 package com.brad.novel.novel.api
 
-
 import com.brad.novel.novel.dto.NovelRequestDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,11 +13,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 
-import java.nio.charset.StandardCharsets
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -50,6 +47,28 @@ class NovelApiControllerTest extends Specification {
             .andExpect(status().is2xxSuccessful())
             .andExpect(jsonPath('$.responseCode').value("SUCCESS_201"))
             .andExpect(jsonPath('$.data.authorName').value("베르나르베르베르")) // 작가명을 자동으로 가져와야 한다.
+            .andDo {
+                mvcResult ->
+                    println(mvcResult.response.contentAsString)
+            }
+    }
+
+    @WithUserDetails("userABC")
+    def "소설의 마지막화, 내가 읽은 마지막화를 함께 조회할 수 있다"() {
+        setup:
+        objectMapper = new ObjectMapper()
+        httpHeaders = new HttpHeaders()
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        when:
+        def resultActions = mvc.perform(get("/novels/1/chapters/2"))
+
+        then:
+        resultActions
+            .andExpect(status().is2xxSuccessful())
+            .andExpect(jsonPath('$.responseCode').value("SUCCESS_201"))
+            .andExpect(jsonPath('$.data.novelSubject').value("novelA"))
+            .andExpect(cookie().value("recentCh","2")) // 쿠키 값 확인.
             .andDo {
                 mvcResult ->
                     println(mvcResult.response.contentAsString)
