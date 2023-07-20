@@ -42,7 +42,7 @@ public class NovelService {
         return novelResponseDto;
     }
     */
-    public Novel findById(Long id) {
+    public Novel findById(Long id) {  // novel 정보를 가져올 때는, 가장 최근 읽은 회차도 포함해야 함.
         return novelRepository.findById(id).orElseThrow(() -> new NovelFoundException("찾는 소설이 없습니다!"));
     }
 }

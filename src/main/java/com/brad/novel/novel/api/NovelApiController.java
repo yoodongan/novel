@@ -4,6 +4,7 @@ import com.brad.novel.chapter.service.ChapterService;
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.member.service.MemberService;
+import com.brad.novel.novel.dto.NovelDetailResponseDto;
 import com.brad.novel.novel.dto.NovelRequestDto;
 import com.brad.novel.novel.dto.NovelResponseDto;
 import com.brad.novel.novel.entity.Novel;
@@ -11,10 +12,7 @@ import com.brad.novel.novel.service.NovelService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -36,6 +34,15 @@ public class NovelApiController {
         Novel findNovel = novelService.findById(novelId);
         NovelResponseDto novelResponseDto = NovelResponseDto.of(findNovel);
         return DataResponse.success(ResponseCode.SUCCESS_201, novelResponseDto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_MEMBER')")
+    @GetMapping("/novels/{novelId}")
+    public DataResponse findNovelDetails(@CookieValue(value = "recentCh", defaultValue = "0") String recentCh,
+                                         @PathVariable("novelId") Long novelId) { // 가장 최근 읽은 회차를 쿠키에 포함
+        Novel novel = novelService.findById(novelId);
+        NovelDetailResponseDto novelDetailResponseDto = NovelDetailResponseDto.of(novel, Integer.parseInt(recentCh));
+        return DataResponse.success(ResponseCode.SUCCESS_201, novelDetailResponseDto);
     }
 
 }

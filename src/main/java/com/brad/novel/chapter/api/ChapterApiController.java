@@ -9,8 +9,11 @@ import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.service.NovelService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Tag(name = "ChapterApiController", description = "에피소드 등록, 전체 에피소드 조회, 단일 에피소드 주문")
-@RequestMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ChapterApiController {
     private final ChapterService chapterService;
@@ -51,4 +54,20 @@ public class ChapterApiController {
         return new DataResponse();
 
     }
+
+    @PreAuthorize("hasRole('ROLE_MEMBER')")
+    @GetMapping("/novels/{novelId}/chapters/{chapterId}")
+    public DataResponse getDetailsChapter(@PathVariable Long novelId,
+                                          @PathVariable Long chapterId,
+                                          HttpServletResponse response) {
+        Novel novel = novelService.findById(novelId);
+        Chapter chapter = chapterService.findById(chapterId);
+        Integer chapterSeq = chapter.getChapterSeq();
+        Cookie cookie = new Cookie("recentCh", String.valueOf(chapterSeq));
+        response.addCookie(cookie);
+        ChapterDetailResponseDto chapterDetailResponseDto = ChapterDetailResponseDto.of(chapter, novel.getSubject());
+        return new DataResponse(ResponseCode.SUCCESS_201, chapterDetailResponseDto);
+    }
+
+
 }
