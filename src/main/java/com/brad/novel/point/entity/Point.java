@@ -10,9 +10,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,7 +22,7 @@ public class Point extends BaseEntity {
     private String preventDupId;
     private Long amount;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Member member;
 
     private static String genPreventDupId(Point point, String startTime) {
@@ -32,8 +30,8 @@ public class Point extends BaseEntity {
     }
     public static Point create(Long amount, Member member) {
         Point point = new Point();
-        point.preventDupId = genPreventDupId(point, String.valueOf(LocalDateTime.now()));
         point.amount = amount;
+        point.member = member;
         return point;
     }
     public void updatePoint(Long minus) {
@@ -42,5 +40,11 @@ public class Point extends BaseEntity {
         } else {
             amount -= minus;
         }
+    }
+
+    public enum EventType {
+        충전_포인트,
+        결제_소설단편결제,
+        환불_소설단편결제;
     }
 }
