@@ -1,6 +1,6 @@
 package com.brad.novel.novel.service
 
-
+import com.brad.novel.chapter.service.ChapterService
 import com.brad.novel.member.service.MemberService
 import com.brad.novel.novel.dto.NovelRequestDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +18,8 @@ class NovelServiceTest extends Specification {
     private NovelService novelService;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private ChapterService chapterService;
 
     @WithUserDetails("authorABC")
     def "소설 저장"() {

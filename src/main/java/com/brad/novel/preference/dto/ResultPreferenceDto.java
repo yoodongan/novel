@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ResultPreferenceDto {
-    private Integer recentCh;   // 가장 최근에 읽은 소설의 Chapter
     private Integer lastCh;   // 소설의 마지막 화
 
     private String subject;
@@ -15,14 +14,13 @@ public class ResultPreferenceDto {
     private String authorName;
     private String imagePath;
 
-    public static ResultPreferenceDto of(Novel novel, Integer recentCh) {
+    public static ResultPreferenceDto of(Novel novel) {
         return ResultPreferenceDto.builder()
                 .lastCh(novel.getLastCh())
                 .subject(novel.getSubject())
                 .genre(novel.getGenre())
                 .authorName(novel.getAuthorName())
                 .imagePath(novel.getImagePath())
-                .recentCh(recentCh)
                 .build();
     }
 }

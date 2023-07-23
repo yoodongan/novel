@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -37,7 +38,7 @@ public class NovelApiController {
     }
 
     @PreAuthorize("hasRole('ROLE_MEMBER')")
-    @GetMapping("/novels/{novelId}")
+    @GetMapping(value = "/novels/{novelId}", consumes = ALL_VALUE)
     public DataResponse findNovelDetails(@CookieValue(value = "recentCh", defaultValue = "0") String recentCh,
                                          @PathVariable("novelId") Long novelId) { // 가장 최근 읽은 회차를 쿠키에 포함
         Novel novel = novelService.findById(novelId);

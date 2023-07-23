@@ -25,7 +25,7 @@ public class PreferenceApiController {
     public DataResponse getPreference(@PathVariable Long memberId, @RequestParam Integer likeNumber) {
         List<Preference> preferences = preferenceService.getPreferenceNovel(memberId, likeNumber);
         List<ResultPreferenceDto> results = preferences.stream()
-                .map(p -> ResultPreferenceDto.of(p.getNovel(), p.getRecentCh()))
+                .map(p -> ResultPreferenceDto.of(p.getNovel()))
                 .collect(Collectors.toList());
         return new DataResponse(ResponseCode.SUCCESS_202, results);
     }
