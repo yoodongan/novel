@@ -1,10 +1,8 @@
 package com.brad.novel.novel.dto;
 
 import com.brad.novel.novel.entity.Novel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -21,8 +19,6 @@ public class NovelDetailResponseDto {
                 .subject(novel.getSubject())
                 .genre(novel.getGenre())
                 .description(novel.getDescription())
-                .imagePath(novel.getImagePath())
-                .lastCh(novel.getLastCh())
                 .recentCh(recentCh)
                 .build();
     }

@@ -1,14 +1,13 @@
 package com.brad.novel.novel.entity;
 
 import com.brad.novel.base.BaseEntity;
-import com.brad.novel.category.entity.Category;
 import com.brad.novel.member.entity.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -21,17 +20,34 @@ import static javax.persistence.FetchType.LAZY;
 public class Novel extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Member member;
-    @ManyToOne(fetch = LAZY)
-    private Category category;
 
+    @Column(nullable = false)
     private String subject;
-    private String genre;
-    private String authorName;
 
-    private Integer lastCh;   // 마지막화
+    @Column(nullable = false)
+    private String genre;
+
+    @Column(nullable = false)
+    private String authorName;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
-    private String imagePath;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PublishedState publishedState;
+
+    @Column(nullable = false)
+    private Integer totalViewCount;
+
+    @Column(nullable = false)
+    private Integer totalChapterCount;
+
+    @Column(nullable = false)
+    private Integer likeScore;
+
+    public void decreaseLikeScore() {
+        if(this.likeScore == 0) return;
+        else this.likeScore--;
+    }
 }
