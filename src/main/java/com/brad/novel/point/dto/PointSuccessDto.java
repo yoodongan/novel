@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PointSuccessDto {
     private Long memberId;
-    private Long amount;
+    private Integer amount;
 }

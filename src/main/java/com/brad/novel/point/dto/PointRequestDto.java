@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class PointRequestDto {
     private Long memberId;
-    private Long amount;
+    private Integer amount;
 
     public Point toPoint(Member member){
         return Point.builder()

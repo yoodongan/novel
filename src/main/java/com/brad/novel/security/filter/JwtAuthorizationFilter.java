@@ -31,9 +31,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String token = bearerToken.substring(8);// Bearer 이후의 토큰 값만 받아온다.
             if(jwtProvider.verify(token)) {
                 Map<String, Object> claims = jwtProvider.getClaims(token);
-                String name = (String) claims.get("name");
+                String username = (String) claims.get("name");
 
-                Member member = memberService.findByName(name);
+                Member member = memberService.findByUsername(username);
 
                 forceAuthentication(member);
             }
@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void forceAuthentication(Member member) {
-        User user = new User(member.getName(), member.getPassword(), member.genAuthorities());
+        User user = new User(member.getUsername(), member.getPassword(), member.genAuthorities());
 
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(user, null, member.genAuthorities());
 

@@ -20,7 +20,7 @@ import javax.persistence.OneToOne;
 @ToString(callSuper = true)
 public class Point extends BaseEntity {
     private String preventDupId;
-    private Long amount;
+    private Integer amount;
 
     @OneToOne
     private Member member;
@@ -28,20 +28,19 @@ public class Point extends BaseEntity {
     private static String genPreventDupId(Point point, String startTime) {
         return point.getId() + "||" + startTime;
     }
-    public static Point create(Long amount, Member member) {
+    public static Point create(Integer amount, Member member) {
         Point point = new Point();
         point.amount = amount;
         point.member = member;
         return point;
     }
-    public void updatePoint(Long minus) {
+    public void updatePoint(Integer minus) {
         if(amount - minus < 0) {
             throw new NoPointException("잔여 포인트가 부족합니다.");
         } else {
             amount -= minus;
         }
     }
-
     public enum EventType {
         충전_포인트,
         결제_소설단편결제,

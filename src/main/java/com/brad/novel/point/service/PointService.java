@@ -13,7 +13,6 @@ import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.brad.novel.common.error.ResponseCode.*;
@@ -29,7 +28,7 @@ public class PointService {
 
     @Transactional
     public void addPoint(Member member, PointRequestDto requestDto) {
-        String lockName = "charge-point" + " / " + "name: " + member.getName();
+        String lockName = "charge-point" + " / " + "name: " + member.getUsername();
         RLock lock = redissonClient.getLock(lockName);
         boolean isLocked = false;
         try {
@@ -73,7 +72,7 @@ public class PointService {
     public Point findByMemberId(Long memberId) {
         return pointRepository.findByMemberId(memberId).get();
     }
-    public void updatePoint(Long memberId, Long amount) {
+    public void updatePoint(Long memberId, Integer amount) {
         Point findPoint = findByMemberId(memberId);
         findPoint.updatePoint(amount);
     }
