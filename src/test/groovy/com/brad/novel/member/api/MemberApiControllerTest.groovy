@@ -1,6 +1,6 @@
 package com.brad.novel.member.api
 
-import com.brad.novel.member.dto.MemberJoinRequestDto
+import com.brad.novel.member.dto.request.MemberJoinRequestDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

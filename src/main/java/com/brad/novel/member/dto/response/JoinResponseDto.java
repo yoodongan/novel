@@ -1,8 +1,8 @@
-package com.brad.novel.member.dto;
+package com.brad.novel.member.dto.response;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class JoinResponseDto {
     private String message;
     private String name;

@@ -20,7 +20,7 @@ public class NovelService {
     private final ModelMapper modelMapper;
 
     public Long save(NovelRequestDto novelRequestDto, String name) {
-        Member member = memberRepository.findByName(name).get();
+        Member member = memberRepository.findByUsername(name).get();
         novelRequestDto.setAuthorName(member.getNickname());
         novelRequestDto.setLastCh(0); // 첫 소설 만들었을 때는, 마지막 챕터가 0이다.
 

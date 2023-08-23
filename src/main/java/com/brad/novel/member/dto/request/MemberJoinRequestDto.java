@@ -1,15 +1,15 @@
-package com.brad.novel.member.dto;
+package com.brad.novel.member.dto.request;
 
 import com.brad.novel.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class MemberJoinRequestDto {
     @NotEmpty(message = "이름을 입력해주세요!")
     private String username;
@@ -20,6 +20,7 @@ public class MemberJoinRequestDto {
         return Member.builder()
                 .username(username)
                 .password(encryptedPassword)
+                .profileImage("Default Image")
                 .restPoint(0)
                 .restTicket(0)
                 .build();

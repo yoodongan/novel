@@ -1,7 +1,7 @@
 package com.brad.novel.init;
 
 import com.brad.novel.chapter.entity.Chapter;
-import com.brad.novel.member.dto.MemberJoinRequestDto;
+import com.brad.novel.member.dto.request.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
 import com.brad.novel.novel.entity.Novel;

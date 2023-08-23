@@ -1,4 +1,4 @@
-package com.brad.novel.member.dto;
+package com.brad.novel.member.dto.request;
 
 import lombok.Data;
 import javax.validation.constraints.NotBlank;

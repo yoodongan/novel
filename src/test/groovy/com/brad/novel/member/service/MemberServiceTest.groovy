@@ -1,7 +1,7 @@
 package com.brad.novel.member.service
 
-
-import com.brad.novel.member.dto.MemberJoinRequestDto
+import com.brad.novel.member.dto.request.AuthorRequestDto
+import com.brad.novel.member.dto.request.MemberJoinRequestDto
 import com.brad.novel.member.exception.AlreadyJoinException
 import com.brad.novel.preference.service.PreferenceService
 import org.springframework.beans.factory.annotation.Autowired
@@ -52,24 +52,24 @@ class MemberServiceTest extends Specification {
 
     def "작가명 등록 확인, 작가 권한 체크까지 테스트"() {
         setup:
-        def nickname = "히가시노게이고"
-        def flag = false  // 작가명 권한이 있는지 체크
+        def AuthorRequestDto requestDto = new AuthorRequestDto("히가시노게이고")
+        def hasAuthority = false  // 작가명 권한이 있는지 체크
 
         when:
-        def member = memberService.findByName("userABC")
-        memberService.beAuthor(1L, nickname)
+        def member = memberService.findByUsername("userABC")
+        memberService.beAuthor(1L, requestDto)
         def authentication = SecurityContextHolder.getContext().getAuthentication()
         def authorities = authentication.getAuthorities()
 
         then:
-        def findMember = memberService.findByName("userABC")
+        def findMember = memberService.findById(1L);
         findMember.nickname == "히가시노게이고"
         for(def a : authorities) {
             if(a.getAuthority().equals("ROLE_AUTHOR")) {
-                flag = true
+                hasAuthority = true
                 break
             }
         }
-        flag == true
+        hasAuthority == true
     }
 }

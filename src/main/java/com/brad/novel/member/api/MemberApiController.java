@@ -3,6 +3,10 @@ package com.brad.novel.member.api;
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.member.dto.*;
+import com.brad.novel.member.dto.request.AuthorRequestDto;
+import com.brad.novel.member.dto.request.LoginRequest;
+import com.brad.novel.member.dto.request.MemberJoinRequestDto;
+import com.brad.novel.member.dto.response.AuthorResponseDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
 import com.brad.novel.point.dto.PointRequestDto;
@@ -41,10 +45,10 @@ public class MemberApiController {
     }
 
     @PostMapping("/{memberId}/author")
-    public DataResponse beAuthor(@PathVariable Long memberId, @RequestBody MemberAuthorDto memberAuthorDto) {
-        memberService.beAuthor(memberId, memberAuthorDto.getNickname());
-        Member findMember = memberService.findById(memberId);
-        return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(findMember.getUsername(), findMember.getNickname()));
+    public DataResponse beAuthor(@PathVariable Long memberId, @RequestBody AuthorRequestDto authorRequestDto) {
+        memberService.beAuthor(memberId, authorRequestDto);
+        Member member = memberService.findById(memberId);
+        return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(member.getUsername(), member.getNickname()));
     }
 
     @PostMapping("/{memberId}/points")

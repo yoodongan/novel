@@ -3,7 +3,8 @@ package com.brad.novel.member.service;
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.global.jwt.JwtProvider;
-import com.brad.novel.member.dto.MemberJoinRequestDto;
+import com.brad.novel.member.dto.request.AuthorRequestDto;
+import com.brad.novel.member.dto.request.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.exception.MemberNotFoundException;
 import com.brad.novel.member.repository.MemberRepository;
@@ -42,19 +43,21 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("찾는 회원이 없습니다!"));
     }
-    public Member findByName(String name) {
-        Optional<Member> optionalMember = memberRepository.findByName(name);
+    public Member findByUsername(String username) {
+        Optional<Member> optionalMember = memberRepository.findByUsername(username);
         return optionalMember.orElseThrow(() -> new MemberNotFoundException("일치하는 회원명이 없습니다!"));
     }
 
-    public void beAuthor(Long memberId, String nickname) {
-        Optional<Member> oMember = memberRepository.findByNickname(nickname);
-        if (oMember.isPresent()) {
+    public void beAuthor(Long memberId, AuthorRequestDto requestDto) {
+        if(memberRepository.existsByNickname(requestDto.getNickname())) {
             throw new NovelServiceException(ResponseCode.ALREADY_EXIST_NICKNAME);
         }
-        Optional<Member> foMember = memberRepository.findById(memberId);
-        foMember.get().addNickname(nickname);
-        addAuthentication(foMember.get());
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NovelServiceException(ResponseCode.ALREADY_EXIST_USERNAME));
+
+        member.addNickname(requestDto.getNickname());
+        addAuthentication(member);
     }
 
     private void addAuthentication(Member member) {
@@ -72,7 +75,7 @@ public class MemberService {
     }
 
     public String genAccessToken(String name, String password) {
-        Member member = findByName(name);
+        Member member = memberRepository.findByUsername(name).get();
         if (!passwordEncoder.matches(password, member.getPassword())) {
             return null;
         }
