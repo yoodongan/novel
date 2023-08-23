@@ -1,5 +1,6 @@
 package com.brad.novel.novel.service;
 
+import com.brad.novel.global.redis.RedisCacheKey;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.repository.MemberRepository;
 import com.brad.novel.novel.dto.NovelRequestDto;
@@ -9,15 +10,28 @@ import com.brad.novel.novel.repository.NovelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = {"preference"})
+@Transactional
 public class NovelService {
     private final NovelRepository novelRepository;
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = RedisCacheKey.PREFERENCE_LIST)
+    public List<Novel> findByBestPreferencePerHour() {
+        return novelRepository.findAllOrderByLikeScoreDesc();
+    }
 
     public Long save(NovelRequestDto novelRequestDto, String name) {
         Member member = memberRepository.findByUsername(name).get();

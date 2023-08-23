@@ -1,18 +1,15 @@
 package com.brad.novel.preference.service;
 
 import com.brad.novel.common.exception.NovelServiceException;
-import com.brad.novel.global.redis.RedisCacheKey;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.repository.NovelRepository;
 import com.brad.novel.preference.dto.response.PreferenceNovelsResponseDto;
 import com.brad.novel.preference.entity.Preference;
 import com.brad.novel.preference.repository.PreferenceRepository;
-import com.brad.novel.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

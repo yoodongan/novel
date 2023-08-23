@@ -43,6 +43,8 @@ public class Novel extends BaseEntity {
     @Column(nullable = false)
     private Integer totalChapterCount;
 
+    private String imagePath;
+
     @Column(nullable = false)
     private Integer likeScore;
 

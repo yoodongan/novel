@@ -4,6 +4,7 @@ import com.brad.novel.chapter.service.ChapterService;
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.member.service.MemberService;
+import com.brad.novel.novel.dto.NovelBestPreferenceDto;
 import com.brad.novel.novel.dto.NovelDetailResponseDto;
 import com.brad.novel.novel.dto.NovelRequestDto;
 import com.brad.novel.novel.dto.NovelResponseDto;
@@ -15,13 +16,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Tag(name = "NovelApiController", description = "작가 회원 - 소설 등록")
-@RequestMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class NovelApiController {
     private final NovelService novelService;
@@ -44,6 +48,15 @@ public class NovelApiController {
         Novel novel = novelService.findById(novelId);
         NovelDetailResponseDto novelDetailResponseDto = NovelDetailResponseDto.of(novel, Integer.parseInt(recentCh));
         return DataResponse.success(ResponseCode.SUCCESS_201, novelDetailResponseDto);
+    }
+
+    @GetMapping("/novels/preferPerHour")
+    public DataResponse findAllOrderByPreference() {
+        List<Novel> novels = novelService.findByBestPreferencePerHour();
+        List<NovelBestPreferenceDto> responseDto = novels.stream()
+                .map(NovelBestPreferenceDto::of)
+                .collect(Collectors.toList());
+        return DataResponse.success(ResponseCode.SUCCESS_201, responseDto);
     }
 
 }
