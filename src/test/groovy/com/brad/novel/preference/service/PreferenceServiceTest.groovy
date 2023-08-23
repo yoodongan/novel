@@ -1,14 +1,13 @@
 package com.brad.novel.preference.service
 
 import com.brad.novel.common.response.DataResponse
-import com.brad.novel.init.InitService
 import com.brad.novel.member.service.MemberService
 import com.brad.novel.novel.dto.NovelResponseDto
+import com.brad.novel.novel.service.NovelService
 import com.brad.novel.preference.dto.BestPreferenceDto
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
@@ -20,38 +19,43 @@ class PreferenceServiceTest extends Specification {
     @Autowired
     MemberService memberService;
     @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     PreferenceService preferenceService;
-
     @Autowired
-    InitService initService;
+    NovelService novelService;
 
-    @BeforeEach
-    def setup1() {
-        initService.init1();
+    def "선호 작품 등록"() {
+        setup:
+        def member = memberService.findById(1L);
+
+        when:
+        Long preferenceId = preferenceService.registerPreferenceNovel(member, 1L);
+
+        then:
+        def preferenceNovel = preferenceService.findById(preferenceId);
+        preferenceNovel.getMember().getId() == 1L
     }
 
-    def "선호작 목록 조회"() {
+    def "선호 작품 삭제"() {
         setup:
-        def member = memberService.findById(1);
+        def member = memberService.findById(1L);
+
         when:
-        def dataResponse = preferenceService.getPreferenceNovel(member, 2) // 선호도가 3이상인 모든 소설 가져오기
+        Long preferenceId = preferenceService.removePreferenceNovel(member, 2L);
+
         then:
-        List<NovelResponseDto> novels = dataResponse.data
-        for(NovelResponseDto n : novels) {
-            System.println(n.subject)
-        }
-        novels.size() == 2
+        def novel = novelService.findById(1L)
+        novel.likeScore == 1
     }
 
-    def "베스트 선호작 리스팅"() {
+    def "유저의 선호작 목록 리스팅"() {
         setup:
+        def member = memberService.findById(1L);
+
         when:
-        DataResponse bestPreferencePerHour = preferenceService.getBestPreferencePerHour();
+        def responseDtos = preferenceService.getPreferenceNovelsResponseDtos(member) // 선호도가 3이상인 모든 소설 가져오기
+
         then:
-        List<BestPreferenceDto> bestPreferenceDtos = bestPreferencePerHour.data
-        bestPreferenceDtos.get(0).getLikeNumber()==4
+        responseDtos.size() == 2
     }
 
 }
