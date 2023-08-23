@@ -24,13 +24,21 @@ import java.util.Map;
 @ToString(callSuper = true)
 @SuperBuilder
 public class Member extends BaseEntity {
-    @Column(unique = true)
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
-    @Column
-    private Long restPoint;
+    @Column(nullable = false)
+    private String profileImage;
+
+    @Column(nullable = false)
+    private Integer restPoint;
+
+    @Column(nullable = false)
+    private Integer restTicket;
 
     @Column(unique = true)
     private String nickname;
@@ -49,14 +57,14 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public void addPoint(Long addPoint) {
+    public void addPoint(Integer addPoint) {
         restPoint += addPoint;
     }
 
     public Map<String, Object> toClaims() {
         return Map.of(
                 "id", getId(),
-                "name", getName()
+                "name", getUsername()
         );
     }
 }

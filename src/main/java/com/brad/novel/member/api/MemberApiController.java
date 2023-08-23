@@ -31,7 +31,7 @@ public class MemberApiController {
     public DataResponse join(@RequestBody @Valid MemberJoinRequestDto memberJoinRequestDto) {
         Long memberId = memberService.join(memberJoinRequestDto);
         Member member = memberService.findById(memberId);
-        return new DataResponse(ResponseCode.SUCCESS_201, new MemberJoinResponseDto(member.getName()));
+        return new DataResponse(ResponseCode.SUCCESS_201, new MemberJoinResponseDto(member.getUsername()));
     }
     @PostMapping("/login")
     public DataResponse login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -44,7 +44,7 @@ public class MemberApiController {
     public DataResponse beAuthor(@PathVariable Long memberId, @RequestBody MemberAuthorDto memberAuthorDto) {
         memberService.beAuthor(memberId, memberAuthorDto.getNickname());
         Member findMember = memberService.findById(memberId);
-        return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(findMember.getName(), findMember.getNickname()));
+        return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(findMember.getUsername(), findMember.getNickname()));
     }
 
     @PostMapping("/{memberId}/points")

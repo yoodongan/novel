@@ -25,21 +25,21 @@ class MemberServiceTest extends Specification {
 
     def "회원가입 확인"() {
         setup:
-        def name = "김철수"
+        def username = "kim519"
         def password = "1234"
-        def memberJoinRequestDto = new MemberJoinRequestDto(name, password)
+        def memberJoinRequestDto = new MemberJoinRequestDto(username, password)
 
         when:
-        def joinName = memberService.join(memberJoinRequestDto)
+        def joinId = memberService.join(memberJoinRequestDto)
         then:
-        def findMember = memberService.findByName(name);
-        findMember.name == name
+        def findMember = memberService.findById(joinId);
+        findMember.username == username
     }
 
-    def "회원명 중복 - 에러"() {
+    def "동일 회원명(username)으로 가입 시 예외 발생"() {
         setup:
-        def memberJoinRequestDto = new MemberJoinRequestDto("김철수", "1234")
-        def memberJoinRequestDto2 = new MemberJoinRequestDto("김철수", "1234")
+        def memberJoinRequestDto = new MemberJoinRequestDto("kim519", "1234")
+        def memberJoinRequestDto2 = new MemberJoinRequestDto("kim519", "1234")
 
         when:
         memberService.join(memberJoinRequestDto)
@@ -47,7 +47,7 @@ class MemberServiceTest extends Specification {
 
         then:
         def e = thrown(AlreadyJoinException.class)
-        e.message == "동일한 이름으로 가입했습니다!"
+        e.message == "동일한 회원명으로 가입했습니다!"
     }
 
     def "작가명 등록 확인, 작가 권한 체크까지 테스트"() {

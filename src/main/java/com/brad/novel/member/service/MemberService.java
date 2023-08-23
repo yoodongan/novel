@@ -5,10 +5,8 @@ import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.global.jwt.JwtProvider;
 import com.brad.novel.member.dto.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
-import com.brad.novel.member.exception.AlreadyJoinException;
 import com.brad.novel.member.exception.MemberNotFoundException;
 import com.brad.novel.member.repository.MemberRepository;
-import com.brad.novel.point.repository.PointRepository;
 import com.brad.novel.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,21 +26,17 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PointRepository pointRepository;
     private final JwtProvider jwtProvider;
 
-    public Long join(MemberJoinRequestDto memberJoinRequestDto) {
-        Optional<Member> oMember = memberRepository.findByName(memberJoinRequestDto.getName());
-        if (oMember.isPresent()) {
-            throw new AlreadyJoinException("동일한 이름으로 가입했습니다!");
+    public Long join(MemberJoinRequestDto requestDto) {
+        if (memberRepository.existsByUsername(requestDto.getUsername())) {
+            throw new NovelServiceException(ResponseCode.ALREADY_EXIST_USERNAME);
         }
-        Member member = Member.builder()
-                .name(memberJoinRequestDto.getName())
-                .password(passwordEncoder.encode(memberJoinRequestDto.getPassword()))
-                .restPoint(0L)
-                .build();
-        memberRepository.save(member);
 
+        String encryptedPassword = passwordEncoder.encode(requestDto.getPassword());
+
+        Member member = requestDto.toMember(encryptedPassword);
+        memberRepository.save(member);
         return member.getId();
     }
     public Member findById(Long id) {
