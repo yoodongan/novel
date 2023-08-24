@@ -1,7 +1,6 @@
 package com.brad.novel.security;
 
 import com.brad.novel.security.filter.JwtAuthorizationFilter;
-import com.brad.novel.security.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +18,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests()
-                .antMatchers("/members/login").permitAll()
-                .anyRequest().authenticated();
-        http
+                .antMatcher("/api/**")
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .antMatchers("/api/members/login").permitAll() // 로그인은 누구나 가능
+                        .anyRequest().authenticated()
+                )
                 .csrf().disable()
                 .cors().disable()
                 .httpBasic().disable()
@@ -35,11 +35,6 @@ public class SecurityConfig {
                         jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class
                 );
         return http.build();
-    }
-    @Bean
-    public CustomLoginSuccessHandler customLoginSuccessHandler() {
-        // 성공할 때 실행되어야 하는 CustomLoginSuccessHandler 를 빈으로 등록
-        return new CustomLoginSuccessHandler();
     }
 
 }

@@ -21,12 +21,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Tag(name = "ChapterApiController", description = "에피소드 등록, 전체 에피소드 조회, 단일 에피소드 주문")
-@RequestMapping(produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ChapterApiController {
     private final ChapterService chapterService;
     private final NovelService novelService;
-
 
     @PostMapping("/novels/{novelId}/chapters")
     public DataResponse writeChapter(@PathVariable Long novelId, @RequestBody ChapterSaveRequestDto chapterSaveRequestDto) {
@@ -68,6 +67,4 @@ public class ChapterApiController {
         ChapterDetailResponseDto chapterDetailResponseDto = ChapterDetailResponseDto.of(chapter, novel.getSubject());
         return new DataResponse(ResponseCode.SUCCESS_201, chapterDetailResponseDto);
     }
-
-
 }

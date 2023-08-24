@@ -18,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Tag(name = "PreferenceApiController", description = "유저 별 선호한 작품 목록 조회, 베스트 선호 작품 조회(1시간 간격으로 갱신)")
-@RequestMapping(produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class PreferenceApiController {
     private final PreferenceService preferenceService;

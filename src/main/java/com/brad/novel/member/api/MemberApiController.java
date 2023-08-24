@@ -2,7 +2,8 @@ package com.brad.novel.member.api;
 
 import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
-import com.brad.novel.member.dto.*;
+import com.brad.novel.member.dto.MemberJoinResponseDto;
+import com.brad.novel.member.dto.MemberLoginResponseDto;
 import com.brad.novel.member.dto.request.AuthorRequestDto;
 import com.brad.novel.member.dto.request.LoginRequest;
 import com.brad.novel.member.dto.request.MemberJoinRequestDto;
@@ -24,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Tag(name = "MemberApiController", description = "회원가입, 작가회원 등록, 포인트 충전")
-@RequestMapping(value = "/members", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/members", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Slf4j
 public class MemberApiController {
