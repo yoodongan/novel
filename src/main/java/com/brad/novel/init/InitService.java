@@ -4,7 +4,9 @@ import com.brad.novel.chapter.entity.Chapter;
 import com.brad.novel.member.dto.request.MemberJoinRequestDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
+import com.brad.novel.novel.entity.Genre;
 import com.brad.novel.novel.entity.Novel;
+import com.brad.novel.novel.entity.PublishedState;
 import com.brad.novel.preference.entity.Preference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,17 +26,16 @@ public class InitService {
         Long memberId = memberService.join(memberJoinRequestDto);
         Member member = memberService.findById(memberId);
 
-        Novel novel = new Novel(member, null, "novelA", "스릴러", "베르나르베르베르", 15, "소설A 설명입니다.", null);
-        Novel novel2 = new Novel(member, null, "novelB", "로맨스", "베르나르베르베르", 20, "소설B 설명입니다.", null);
-        Novel novel3 = new Novel(member, null, "novelC", "스릴러", "베르나르베르베르", 40, "소설C 설명입니다.", null);
+        Novel novel = new Novel(member, "novelA", Genre.ACTION, "베르나르베르베르", "소설A 설명입니다.", PublishedState.PUBLISHED, 0, 10, "default Image", 1);
+        Novel novel2 = new Novel(member, "novelB", Genre.ROMANCE, "베르나르베르베르", "소설B 설명입니다.", PublishedState.NOT_PUBLISHED, 0, 20, "default Image", 2);
+        Novel novel3 = new Novel(member, "novelC", Genre.ACTION, "베르나르베르베르", "소설C 설명입니다.", PublishedState.FINISHED, 0, 15, "default Image", 3);
+
         em.persist(novel);
         em.persist(novel2);
         em.persist(novel3);
 
-        Preference preference = new Preference(member, novel, 3);  // 가장 최근 읽은 회차는 쿠키에 저장
         Preference preference2 = new Preference(member, novel2, 2);
         Preference preference3 = new Preference(member, novel3, 4);
-        em.persist(preference);
         em.persist(preference2);
         em.persist(preference3);
 

@@ -1,5 +1,6 @@
 package com.brad.novel.novel.dto;
 
+import com.brad.novel.novel.entity.Genre;
 import com.brad.novel.novel.entity.Novel;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.Data;
 @Builder
 public class NovelBestPreferenceDto {
     private String subject;
-    private String genre;
+    private Genre genre;
     private String authorName;
     private String imagePath;
 

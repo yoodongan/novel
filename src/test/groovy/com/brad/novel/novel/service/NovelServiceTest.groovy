@@ -2,7 +2,7 @@ package com.brad.novel.novel.service
 
 import com.brad.novel.chapter.service.ChapterService
 import com.brad.novel.member.service.MemberService
-import com.brad.novel.novel.dto.NovelRequestDto
+import com.brad.novel.novel.dto.request.NovelRegisterRequestDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.test.context.support.WithUserDetails
@@ -24,7 +24,7 @@ class NovelServiceTest extends Specification {
     @WithUserDetails("authorABC")
     def "소설 저장"() {
         setup:
-        def novelRequestDto = new NovelRequestDto()
+        def novelRequestDto = new NovelRegisterRequestDto()
         novelRequestDto.subject = "제목A"
         novelRequestDto.genre = "스릴러"
         novelRequestDto.description = "이것은 스릴러 장르로, 마지막에 반전이 숨겨진 흥미진진한 소설입니다."

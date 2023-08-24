@@ -2,6 +2,7 @@ package com.brad.novel.novel.entity;
 
 import com.brad.novel.base.BaseEntity;
 import com.brad.novel.member.entity.Member;
+import com.brad.novel.novel.dto.request.NovelModifyRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,8 @@ public class Novel extends BaseEntity {
     private String subject;
 
     @Column(nullable = false)
-    private String genre;
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
 
     @Column(nullable = false)
     private String authorName;
@@ -51,5 +53,20 @@ public class Novel extends BaseEntity {
     public void decreaseLikeScore() {
         if(this.likeScore == 0) return;
         else this.likeScore--;
+    }
+
+    public void addAuthorName(String nickname) {
+        this.authorName = nickname;
+    }
+
+    public void modifyNovel(NovelModifyRequestDto requestDto) {
+        this.subject = requestDto.getSubject();
+        this.genre = requestDto.getGenre();
+        this.description = requestDto.getDescription();
+        this.publishedState = requestDto.getPublishedState();
+    }
+
+    public void addDefaultImage(String defaultImage) {
+        this.imagePath = defaultImage;
     }
 }

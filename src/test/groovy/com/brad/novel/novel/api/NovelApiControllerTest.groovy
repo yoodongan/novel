@@ -1,6 +1,6 @@
 package com.brad.novel.novel.api
 
-import com.brad.novel.novel.dto.NovelRequestDto
+import com.brad.novel.novel.dto.request.NovelRegisterRequestDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -35,7 +35,7 @@ class NovelApiControllerTest extends Specification {
         httpHeaders = new HttpHeaders()
         httpHeaders.setContentType(MediaType.APPLICATION_JSON)
 
-        def request = new NovelRequestDto(null, "제목1", "스릴러", null, null, "상세설명", null)
+        def request = new NovelRegisterRequestDto(null, "제목1", "스릴러", null, null, "상세설명", null)
 
         when:
         def resultActions = mvc.perform(post("/novels")

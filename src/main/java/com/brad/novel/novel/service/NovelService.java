@@ -1,11 +1,13 @@
 package com.brad.novel.novel.service;
 
+import com.brad.novel.common.error.ResponseCode;
+import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.global.redis.RedisCacheKey;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.repository.MemberRepository;
-import com.brad.novel.novel.dto.NovelRequestDto;
+import com.brad.novel.novel.dto.request.NovelModifyRequestDto;
+import com.brad.novel.novel.dto.request.NovelRegisterRequestDto;
 import com.brad.novel.novel.entity.Novel;
-import com.brad.novel.novel.exception.NovelFoundException;
 import com.brad.novel.novel.repository.NovelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,36 +29,39 @@ public class NovelService {
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
 
+    /* 베스트 선호 작품 목록 리스팅(캐싱) */
     @Transactional(readOnly = true)
     @Cacheable(value = RedisCacheKey.PREFERENCE_LIST)
     public List<Novel> findByBestPreferencePerHour() {
-        return novelRepository.findAllOrderByLikeScoreDesc();
+        return novelRepository.findAllByOrderByLikeScoreDesc();
     }
 
-    public Long save(NovelRequestDto novelRequestDto, String name) {
-        Member member = memberRepository.findByUsername(name).get();
-        novelRequestDto.setAuthorName(member.getNickname());
-        novelRequestDto.setLastCh(0); // 첫 소설 만들었을 때는, 마지막 챕터가 0이다.
+    /* 소설 등록 */
+    public Long registerNovel(NovelRegisterRequestDto requestDto, String name) {
+        Member member = memberRepository.findByUsername(name)
+                        .orElseThrow(() -> new NovelServiceException(ResponseCode.NOT_FOUND_MEMBER));
 
-        Novel novel = modelMapper.map(novelRequestDto, Novel.class);
-        log.info(novel.getSubject());
+        Novel novel = modelMapper.map(requestDto, Novel.class);
+        novel.addAuthorName(member.getNickname()); // 작가명을 넣어준다.
+        if(requestDto.getImagePath() == null) novel.addDefaultImage("Default Image");
         novelRepository.save(novel);
         return novel.getId();
     }
-    /*
-    public NovelResponseDto findByEx(Long id) {
-        Novel novel = novelRepository.findById(id).orElseThrow(() -> new NovelFoundException("찾는 소설이 없습니다!"));
-        NovelResponseDto novelResponseDto = NovelResponseDto.builder()
-                .id(novel.getId())
-                .subject(novel.getSubject())
-                .genre(novel.getGenre())
-                .authorName(novel.getAuthorName())
-                .description(novel.getDescription())
-                .build();
-        return novelResponseDto;
+    /* 소설 수정 */
+    public Long modifyNovel(Long novelId, NovelModifyRequestDto requestDto) {
+        Novel novel = findById(novelId);
+        novel.modifyNovel(requestDto);
+        return novel.getId();
     }
-    */
-    public Novel findById(Long id) {  // novel 정보를 가져올 때는, 가장 최근 읽은 회차도 포함해야 함.
-        return novelRepository.findById(id).orElseThrow(() -> new NovelFoundException("찾는 소설이 없습니다!"));
+    /* 소설 삭제 */
+    public Long deleteNovel(Long novelId) {
+        Novel novel = findById(novelId);
+        novelRepository.delete(novel);
+        return novelId;
+    }
+
+    public Novel findById(Long novelId) {
+        return novelRepository.findById(novelId)
+                .orElseThrow(() -> new NovelServiceException(ResponseCode.NOT_FOUND_NOVEL));
     }
 }
