@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface NovelRepository extends JpaRepository<Novel, Long> {
     List<Novel> findAllByOrderByLikeScoreDesc();
+
+    List<Novel> findBySubjectContainingOrAuthorNameContaining(String target);
 }

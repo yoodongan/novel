@@ -7,6 +7,7 @@ import com.brad.novel.novel.dto.NovelDetailResponseDto;
 import com.brad.novel.novel.dto.request.NovelModifyRequestDto;
 import com.brad.novel.novel.dto.request.NovelRegisterRequestDto;
 import com.brad.novel.novel.dto.response.NovelRegisterResponseDto;
+import com.brad.novel.novel.dto.response.NovelResponseDto;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.service.NovelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,4 +71,9 @@ public class NovelApiController {
         return DataResponse.success(ResponseCode.SUCCESS_201, responseDto);
     }
 
+    @GetMapping("/novels/search/{queryString}")
+    public DataResponse findBySubjectOrAuthorName(@PathVariable String queryString) {
+        List<NovelResponseDto> responseDtoList = novelService.findBySearch(queryString);
+        return DataResponse.success(ResponseCode.SUCCESS_201, responseDtoList);
+    }
 }
