@@ -1,6 +1,7 @@
 package com.brad.novel.preference.dto.response;
 
 import com.brad.novel.member.entity.Member;
+import com.brad.novel.novel.entity.Genre;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.entity.PublishedState;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class PreferenceNovelsResponseDto {
     private String username;
 
     private String novelSubject;
-    private String novelGenre;
+    private Genre novelGenre;
     private String authorName;
 
     @Enumerated(EnumType.STRING)

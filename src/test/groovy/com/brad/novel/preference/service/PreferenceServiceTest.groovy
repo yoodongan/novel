@@ -1,13 +1,9 @@
 package com.brad.novel.preference.service
 
-import com.brad.novel.common.response.DataResponse
 import com.brad.novel.member.service.MemberService
-import com.brad.novel.novel.dto.NovelResponseDto
 import com.brad.novel.novel.service.NovelService
-import com.brad.novel.preference.dto.BestPreferenceDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
