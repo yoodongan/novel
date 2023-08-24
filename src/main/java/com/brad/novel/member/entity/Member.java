@@ -64,7 +64,7 @@ public class Member extends BaseEntity {
     public Map<String, Object> toClaims() {
         return Map.of(
                 "id", getId(),
-                "name", getUsername()
+                "username", getUsername()
         );
     }
 }

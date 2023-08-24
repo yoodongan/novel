@@ -28,10 +28,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String bearerToken = request.getHeader("Authorization");  // 토큰 앞에 "Bearer "를 붙이는 것이 관례다.
         if(bearerToken != null) {
-            String token = bearerToken.substring(8);// Bearer 이후의 토큰 값만 받아온다.
+            String token = bearerToken.substring("Bearer ".length());// Bearer 이후의 토큰 값만 받아온다.
             if(jwtProvider.verify(token)) {
                 Map<String, Object> claims = jwtProvider.getClaims(token);
-                String username = (String) claims.get("name");
+                String username = (String) claims.get("username");
 
                 Member member = memberService.findByUsername(username);
 
