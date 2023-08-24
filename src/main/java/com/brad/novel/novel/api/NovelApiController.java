@@ -76,4 +76,11 @@ public class NovelApiController {
         List<NovelResponseDto> responseDtoList = novelService.findBySearch(queryString);
         return DataResponse.success(ResponseCode.SUCCESS_201, responseDtoList);
     }
+
+    @GetMapping("/novels/{genre}")
+    public DataResponse findByGenre(@PathVariable("genre") String koreaGenre) {
+        List<NovelResponseDto> responseDtoList = novelService.findByGenre(koreaGenre);
+        return DataResponse.success(ResponseCode.SUCCESS_201, responseDtoList);
+    }
+
 }

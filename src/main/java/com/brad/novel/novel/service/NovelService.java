@@ -8,6 +8,7 @@ import com.brad.novel.member.repository.MemberRepository;
 import com.brad.novel.novel.dto.request.NovelModifyRequestDto;
 import com.brad.novel.novel.dto.request.NovelRegisterRequestDto;
 import com.brad.novel.novel.dto.response.NovelResponseDto;
+import com.brad.novel.novel.entity.Genre;
 import com.brad.novel.novel.entity.Novel;
 import com.brad.novel.novel.repository.NovelRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,6 +72,16 @@ public class NovelService {
     /* 소설 검색 - 소설 제목 또는 작가 이름을 입력한다. */
     public List<NovelResponseDto> findBySearch(String target) {
         List<Novel> novels = novelRepository.findBySubjectContainingOrAuthorNameContaining(target);
+        List<NovelResponseDto> novelResponseDtoList = novels.stream()
+                .map(NovelResponseDto::from)
+                .collect(Collectors.toList());
+        return novelResponseDtoList;
+    }
+
+    /* 검색할 때, '로맨스'라고 검색하면 enum의 ROMANCE를 가져와야 한다. */
+    public List<NovelResponseDto> findByGenre(String koreaGenre) {
+        Genre genre = Genre.getGenre(koreaGenre);
+        List<Novel> novels = novelRepository.findByGenre(genre);
         List<NovelResponseDto> novelResponseDtoList = novels.stream()
                 .map(NovelResponseDto::from)
                 .collect(Collectors.toList());

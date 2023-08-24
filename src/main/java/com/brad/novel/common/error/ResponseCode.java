@@ -20,6 +20,8 @@ public enum ResponseCode {
     NOT_FOUND_NOVEL(HttpStatus.NOT_FOUND, "NOVEL_001", "소설을 찾을 수 없습니다."),
     NOT_FOUND_CHAPTER(HttpStatus.NOT_FOUND, "CHAPTER_001", "찾을 수 없는 에피소드입니다."),
 
+    NOT_FOUND_GENRE(HttpStatus.NOT_FOUND, "GENRE_001", "장르를 찾을 수 없습니다!"),
+
     NOT_FOUND_POINT(HttpStatus.NOT_FOUND, "POINT_001", "찾을 수 없는 포인트입니다."),
     LACK_POINT(HttpStatus.BAD_REQUEST, "POINT_001", "포인트가 부족합니다."),
 

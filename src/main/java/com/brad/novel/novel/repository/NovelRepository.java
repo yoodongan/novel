@@ -1,5 +1,6 @@
 package com.brad.novel.novel.repository;
 
+import com.brad.novel.novel.entity.Genre;
 import com.brad.novel.novel.entity.Novel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,6 @@ public interface NovelRepository extends JpaRepository<Novel, Long> {
     List<Novel> findAllByOrderByLikeScoreDesc();
 
     List<Novel> findBySubjectContainingOrAuthorNameContaining(String target);
+
+    List<Novel> findByGenre(Genre genre);
 }
