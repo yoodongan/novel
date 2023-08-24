@@ -14,12 +14,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,30 +32,27 @@ public class NovelApiController {
     private final NovelService novelService;
 
     @PostMapping(value = "/novels", consumes = APPLICATION_JSON_VALUE)
-    @Operation(summary = "등록", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "소설 등록", security = @SecurityRequirement(name = "bearerAuth"))
     public DataResponse registerNovel(@Parameter(hidden = true) @AuthenticationPrincipal User user, @RequestBody NovelRegisterRequestDto requestDto) {
         Long novelId = novelService.registerNovel(requestDto, user.getUsername());
         Novel findNovel = novelService.findById(novelId);
         NovelRegisterResponseDto responseDto = NovelRegisterResponseDto.from(findNovel);
         return DataResponse.success(ResponseCode.SUCCESS_201, responseDto);
     }
-
-    @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    @PutMapping("/novels/{novelId}")
-    public DataResponse modifyNovel(@PathVariable Long novelId, @RequestBody NovelModifyRequestDto requestDto, Principal principal) {
+    @PutMapping(value = "/novels/{novelId}", consumes = APPLICATION_JSON_VALUE)
+    @Operation(summary = "소설 수정", security = @SecurityRequirement(name = "bearerAuth"))
+    public DataResponse modifyNovel(@PathVariable Long novelId, @RequestBody NovelModifyRequestDto requestDto) {
         novelService.modifyNovel(novelId, requestDto);
         return DataResponse.success(ResponseCode.SUCCESS_201, String.format("%d번 소설이 수정되었습니다.", novelId));
     }
 
-    @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    @DeleteMapping("/novels/{novelId}")
+    @DeleteMapping(value = "/novels/{novelId}", consumes = APPLICATION_JSON_VALUE)
+    @Operation(summary = "소설 삭제", security = @SecurityRequirement(name = "bearerAuth"))
     public DataResponse deleteNovel(@PathVariable Long novelId) {
         novelService.deleteNovel(novelId);
         return DataResponse.success(ResponseCode.SUCCESS_201, String.format("%d번 소설이 삭제되었습니다.", novelId));
     }
 
-
-    @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping(value = "/novels/{novelId}", consumes = ALL_VALUE)
     public DataResponse findNovelDetails(@CookieValue(value = "recentCh", defaultValue = "0") String recentCh,
                                          @PathVariable("novelId") Long novelId) { // 가장 최근 읽은 회차를 쿠키에 포함

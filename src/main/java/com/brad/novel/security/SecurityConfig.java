@@ -4,6 +4,7 @@ import com.brad.novel.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,7 +21,8 @@ public class SecurityConfig {
         http
                 .antMatcher("/api/**")
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .antMatchers("/api/members/login").permitAll() // 로그인은 누구나 가능
+                        .antMatchers(HttpMethod.POST, "/api/members/login").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/novels/preferPerHour").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()
@@ -36,5 +38,4 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
 }
