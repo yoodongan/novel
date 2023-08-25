@@ -11,4 +11,6 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
     Optional<Chapter> findBySubject(String subject);
 
     List<Chapter> findAllByNovel(Novel novel);
+
+    boolean existsByNovelAndSubject(Novel novel, String subject);
 }

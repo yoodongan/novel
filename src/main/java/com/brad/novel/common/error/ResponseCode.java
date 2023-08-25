@@ -18,9 +18,11 @@ public enum ResponseCode {
     NOT_FOUND_PREFERENCE_NOVEL(HttpStatus.NOT_FOUND, "PREFERENCE_002", "선호 작품을 찾을 수 없습니다."),
 
     NOT_FOUND_NOVEL(HttpStatus.NOT_FOUND, "NOVEL_001", "소설을 찾을 수 없습니다."),
-    NOT_FOUND_CHAPTER(HttpStatus.NOT_FOUND, "CHAPTER_001", "찾을 수 없는 에피소드입니다."),
-
     NOT_FOUND_GENRE(HttpStatus.NOT_FOUND, "GENRE_001", "장르를 찾을 수 없습니다!"),
+    NOT_FOUND_CHAPTER(HttpStatus.NOT_FOUND, "CHAPTER_001", "찾을 수 없는 챕터(에피소드)입니다."),
+    ALREADY_EXIST_CHAPTER_SUBJECT(HttpStatus.NOT_FOUND, "CHAPTER_002", "이미 존재하는 챕터(에피소드)입니다!"),
+
+    NOT_FOUND_MY_CHAPTER(HttpStatus.NOT_FOUND, "MY_CHAPTER_001", "찾을 수 없는 나의 챕터(에피소드)입니다."),
 
     NOT_FOUND_POINT(HttpStatus.NOT_FOUND, "POINT_001", "찾을 수 없는 포인트입니다."),
     LACK_POINT(HttpStatus.BAD_REQUEST, "POINT_001", "포인트가 부족합니다."),

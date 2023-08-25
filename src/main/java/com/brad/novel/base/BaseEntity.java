@@ -29,10 +29,10 @@ public class BaseEntity {
     private Long id;
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    protected LocalDateTime createdDate;
 
     @LastModifiedDate
-    private LocalDateTime modifiedDate;
+    protected LocalDateTime modifiedDate;
 
     public BaseEntity(Long id) {
         this.id = id;
