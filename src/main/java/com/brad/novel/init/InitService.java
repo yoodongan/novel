@@ -39,17 +39,19 @@ public class InitService {
         em.persist(preference2);
         em.persist(preference3);
 
-        Chapter chapter = new Chapter(novel, 1, "1화 제목입니다.", "1화 줄거리입니다.", "1화 실제 내용입니다.", "null", 1500);
-        Chapter chapter2 = new Chapter(novel, 2, "2화 제목입니다.", "2화 줄거리입니다.", "2화 실제 내용입니다.", "null", 1500);
-        Chapter chapter3 = new Chapter(novel, 3, "3화 제목입니다.", "3화 줄거리입니다.", "3화 실제 내용입니다.", "null", 1500);
-        Chapter chapter4 = new Chapter(novel, 4, "4화 제목입니다.", "4화 줄거리입니다.", "4화 실제 내용입니다.", "null", 1500);
-        Chapter chapter5 = new Chapter(novel, 5, "5화 제목입니다.", "5화 줄거리입니다.", "5화 실제 내용입니다.", "null", 1500);
-        Chapter chapter6 = new Chapter(novel, 6, "6화 제목입니다.", "6화 줄거리입니다.", "6화 실제 내용입니다.", "null", 1500);
-        Chapter chapter7 = new Chapter(novel, 7, "7화 제목입니다.", "7화 줄거리입니다.", "7화 실제 내용입니다.", "null", 1500);
+        Chapter chapter = new Chapter(novel, "1화 제목입니다.", "1화 줄거리입니다.", "1화 실제 내용입니다.", 1, 0, 10, "default Image", 5);
+        Chapter chapter2 = new Chapter(novel, "2화 제목입니다.", "2화 줄거리입니다.", "2화 실제 내용입니다.", 2, 0, 10, "default Image", 5);
+        Chapter chapter3 = new Chapter(novel, "3화 제목입니다.", "3화 줄거리입니다.", "3화 실제 내용입니다.", 3, 0, 10, "default Image", 5);
+        Chapter chapter4 = new Chapter(novel, "4화 제목입니다.", "4화 줄거리입니다.", "4화 실제 내용입니다.", 4, 0, 10, "default Image", 5);
+        Chapter chapter5 = new Chapter(novel, "5화 제목입니다.", "5화 줄거리입니다.", "5화 실제 내용입니다.", 5, 0, 10, "default Image", 5);
+        Chapter chapter6 = new Chapter(novel, "6화 제목입니다.", "6화 줄거리입니다.", "6화 실제 내용입니다.", 6, 0, 10, "default Image", 5);
+
         em.persist(chapter);
         em.persist(chapter2);
         em.persist(chapter3);
         em.persist(chapter4);
+        em.persist(chapter5);
+        em.persist(chapter6);
 
     }
     public void init2() {
