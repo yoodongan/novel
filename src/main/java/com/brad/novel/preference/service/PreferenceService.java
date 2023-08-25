@@ -70,4 +70,15 @@ public class PreferenceService {
                 .collect(Collectors.toList());
         return preferenceNovels;
     }
+
+    public Preference findByMemberAndNovelId(Member member, Long novelId) {
+        return preferenceRepository.findByMemberAndNovelId(member, novelId)
+                .orElseThrow(() -> new NovelServiceException(NOT_FOUND_PREFERENCE_NOVEL));
+    }
+
+    public void updateLastRecentChapter(Member member, Long novelId, Integer chapterSequence) {
+        Preference preference = findByMemberAndNovelId(member, novelId);
+        preference.updateRecentCh(chapterSequence);
+
+    }
 }

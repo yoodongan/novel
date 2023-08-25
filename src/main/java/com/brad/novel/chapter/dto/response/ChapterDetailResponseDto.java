@@ -1,4 +1,4 @@
-package com.brad.novel.chapter.dto;
+package com.brad.novel.chapter.dto.response;
 
 import com.brad.novel.chapter.entity.Chapter;
 import lombok.Builder;

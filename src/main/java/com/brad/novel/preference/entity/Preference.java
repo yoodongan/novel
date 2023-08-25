@@ -32,4 +32,7 @@ public class Preference extends BaseEntity {
                 .recentCh(0)
                 .build();
     }
+    public void updateRecentCh(Integer chapterSequence) {
+        this.recentCh = chapterSequence;
+    }
 }

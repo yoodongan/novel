@@ -10,6 +10,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -68,5 +70,9 @@ public class Novel extends BaseEntity {
 
     public void addDefaultImage(String defaultImage) {
         this.imagePath = defaultImage;
+    }
+
+    public void updateDate() {
+        this.modifiedDate = LocalDateTime.now();
     }
 }
