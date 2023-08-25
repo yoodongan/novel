@@ -1,8 +1,6 @@
 package com.brad.novel.chapter.service
 
-import com.brad.novel.chapter.dto.ChapterRequestDto
-import com.brad.novel.chapter.dto.ChapterShortResponseDto
-import com.brad.novel.common.response.DataResponse
+import com.brad.novel.chapter.dto.request.ChapterRegisterRequestDto
 import com.brad.novel.init.InitService
 import com.brad.novel.member.service.MemberService
 import com.brad.novel.novel.service.NovelService
@@ -35,24 +33,12 @@ class ChapterServiceTest extends Specification {
 
     def "소설(챕터) 작성"() {
         setup:
-        def novel = novelService.findById(1L)
-        ChapterRequestDto request = new ChapterRequestDto(novel, 1, "소설1-1화의 제목입니다.", "줄거리 입니다", "실제 내용입니다.실제 내용입니다.실제 내용입니다.실제 내용입니다.실제 내용입니다.실제 내용입니다.실제 내용입니다.", null, 1500);
+        def novel = novelService.findById(2L)
+        ChapterRegisterRequestDto requestDto = new ChapterRegisterRequestDto(novel, "소설 2-1화의 제목입니다.", "소설 2-2화의 줄거리 입니다", "실제 내용입니다.실제 내용입니다.", 10, 20, "default Image", 5);
         when:
-        chapterService.writeNovel(novel, request);
+        chapterService.registerChapter(novel.getId(), requestDto);
         then:
-        def findChap = chapterService.findBySubject("소설1-1화의 제목입니다.");
-        findChap.subject == "소설1-1화의 제목입니다."
-    }
-
-    def "소설 편 당 조회"() {
-        setup:
-        def novel = novelService.findById(1L);
-
-        when:
-        DataResponse chapters = chapterService.findAllChapter(novel)
-        List<ChapterShortResponseDto> chapterShorts = chapters.data
-
-        then:
-        chapterShorts.size() == 4
+        def findChap = chapterService.findBySubject("소설 2-1화의 제목입니다.");
+        findChap.subject == "소설 2-1화의 제목입니다."
     }
 }
