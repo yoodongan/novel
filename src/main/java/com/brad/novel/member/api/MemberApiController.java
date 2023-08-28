@@ -10,9 +10,6 @@ import com.brad.novel.member.dto.request.MemberJoinRequestDto;
 import com.brad.novel.member.dto.response.AuthorResponseDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
-import com.brad.novel.transactions.dto.PointChargeRequestDto;
-import com.brad.novel.point.dto.PointSuccessDto;
-import com.brad.novel.point.service.PointService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +27,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class MemberApiController {
     private final MemberService memberService;
-    private final PointService pointService;
 
     @PostMapping("/join")
     public DataResponse join(@RequestBody @Valid MemberJoinRequestDto memberJoinRequestDto) {
