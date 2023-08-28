@@ -1,20 +1,21 @@
 # 웹소설 서비스 REST API
-## ERD 설계
-![](https://velog.velcdn.com/images/daryu519/post/ec2d5277-ec1b-4e0e-ac98-30a88467116b/image.png)
+## ERD 설계 
+![](https://i.imgur.com/UxbY30n.png)
 ## REST API 설계
+
+## 진행 기간
+1차 : 2023.04.06 ~ 2023.05.02      
+2차[리팩토링] : 2023.08.23 ~ 
 
 ➡️ [API 명세](https://hushed-bite-bb4.notion.site/10674566d0754dd08666da7a2b8ff188?v=e6318d3b059f48e1a7c732ff7ac42d7f)
 
-## API 구성
-> Swagger 를 활용해 API 테스트를 진행했다. 다음은 본 프로젝트에서 다룬 대표적 기능들에 대한 API 요청과 응답 결과이다.
-### 선호작 조회(1시간 간격으로 갱신, 캐싱 사용)
-<img src="src/main/resources/img/img_2.png"  width="500" height="400"/>
-
-### 포인트 중복 충전 요청 (동시성 문제 해결)
-<img src="src/main/resources/img/img_3.png"  width="500" height="400"/>
-
-### 회원 별 선호작 목(해당 회원이 선호하는 작품 목록 조회, N+1 문제 해결)
-<img src="src/main/resources/img/img_4.png"  width="500" height="400"/>
+## 시퀀스 다이어그램 (리팩토링 후)
+### Spring Security, JWT를 사용한 회원가입 및 로그인
+![](https://i.imgur.com/BHFWzgk.png)
+### 베스트 선호 작품 목록(캐싱) 외 소설 도메인 관련 기능
+![](https://i.imgur.com/hzVxPQi.png)
+### 동시성 문제, MyChapter(보유 중인 소설의 Chapter) 관련 기능
+![](https://i.imgur.com/7flLnLK.png)
 
 
 ## 프로젝트에서 다룬 내용
@@ -42,7 +43,8 @@
 ## 기술 스택
 - Java 17
 - Spring Data JPA
-- Spring Security
+- Spring Security 
+- JWT
 - MySQL
 - Redis
 - Spock
@@ -56,8 +58,17 @@
 - 응답 객체, 응답 코드, 각 계층 별 책임원칙에 대한 유지보수를 진행해 공통 부분을 묶어내고 변경 지점을 최소화 했습니다.
 - 엔티티 - dto 의 쉽고 빠른 전환을 위해 Builder 패턴이 아닌 ModelMapper 를 다뤄보았습니다.
 
+## 리팩토링
+- 메서드 통일 및 도메인 모델 패턴 적용해 객체지향적 설계로 변경
+- 부족하다고 판단한 Novel 및 Member 필드 추가, 테스트 코드 수정
+- 복잡한 비즈니스 로직 수정
+  - 위에서 다룬 fetch join을 적용한 부분에서 '선호도 점수' 개념을 없애고 '좋아요'로 단순하게 변경
+  - '좋아요'를 통해 선호 작품으로 등록하면 소설의 선호도가 1 증가하도록 구현
+  - 총 조회수, 총 챕터수, 선호도 점수 는 자동으로 계산되어 넣어지도록 구현
+- 회원 작가 등록 후 소설 등록 시 '권한 체크', Swagger로 테스트
+- 시퀀스 다이어그램 작성
+
 ## 아쉬운 점
 > 추후 보안할 내용들, 프로젝트를 진행하면서 아쉬웠던 점을 정리했습니다.
 - 대용량 데이터 처리에 대한 부분은 시간 관계 상 다루지 못했습니다.
-- 동시성 문제를 해결하는 과정에서, 단일 서버에서는 비관 락을 통해 충분히 해결할 수 있다고 생각하지만 분산 락 개념을 통해 해결했습니다.
 - 실제로 어떻게 작동할지와 관련한 프로파일링 측정 부분을 다루지 못했습니다.
