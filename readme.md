@@ -9,6 +9,9 @@
 1차 : 2023.04.06 ~ 2023.05.02      
 2차[리팩토링] : 2023.08.23 ~
 
+## 아키텍처
+![](https://i.imgur.com/YZ3vdfu.png)
+
 ## 시퀀스 다이어그램 (리팩토링 후)
 ### Spring Security, JWT를 사용한 회원가입 및 로그인
 ![](https://i.imgur.com/BHFWzgk.png)
