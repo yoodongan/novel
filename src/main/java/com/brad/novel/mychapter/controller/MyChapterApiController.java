@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,6 +35,17 @@ public class MyChapterApiController {
 
         return DataResponse.success(ResponseCode.SUCCESS_201, myChapterReadResponseDto);
     }
+
+    @PostMapping("/novels/{novelId}/chapters/{chapterId}")
+    public DataResponse buyChapter(@PathVariable Long novelId,
+                                   @PathVariable Long chapterId,
+                                   @AuthenticationPrincipal MemberContext memberContext) {
+        myChapterService.buyChapter(memberContext.getMember(), chapterId);
+        return DataResponse.success(ResponseCode.SUCCESS_201, "Chapter 구매에 성공했습니다.");
+    }
+
+
+
 
 
 

@@ -67,4 +67,8 @@ public class Member extends BaseEntity {
                 "username", getUsername()
         );
     }
+
+    public void useTicket(Integer ticketPrice) {
+        this.restTicket -= ticketPrice;
+    }
 }

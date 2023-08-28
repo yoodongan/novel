@@ -1,5 +1,6 @@
 package com.brad.novel.mychapter.repository;
 
+import com.brad.novel.member.entity.Member;
 import com.brad.novel.mychapter.entity.MyChapter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,6 @@ public interface MyChapterRepository extends JpaRepository<MyChapter, Long> {
             "AND mc.chapter.id = :chapterId"
     )
     Optional<MyChapter> findByMemberIdAndChapterId(@Param("memberId") Long memberId, @Param("chapterId") Long chapterId);
+
+    boolean existsByMemberAndChapterId(Member member, Long chapterId);
 }
