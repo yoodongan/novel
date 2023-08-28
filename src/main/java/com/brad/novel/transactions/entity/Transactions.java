@@ -3,6 +3,7 @@ package com.brad.novel.transactions.entity;
 import com.brad.novel.base.BaseEntity;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.transactions.dto.PointChargeRequestDto;
+import com.brad.novel.transactions.dto.TicketChargeRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,14 @@ public class Transactions extends BaseEntity {
                 .amount(requestDto.getAmount())
                 .member(member)
                 .type(Type.POINT_CHARGE)
+                .build();
+    }
+
+    public static Transactions toChargeTicketTransactions(Member member, TicketChargeRequestDto requestDto){
+        return Transactions.builder()
+                .amount(requestDto.getAmount())
+                .member(member)
+                .type(Type.TICKET_CHARGE)
                 .build();
     }
 }

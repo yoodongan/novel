@@ -61,6 +61,10 @@ public class Member extends BaseEntity {
         restPoint += addPoint;
     }
 
+    public void usePoint(Integer usePoint) {
+        restPoint -= usePoint;
+    }
+
     public Map<String, Object> toClaims() {
         return Map.of(
                 "id", getId(),
@@ -70,5 +74,9 @@ public class Member extends BaseEntity {
 
     public void useTicket(Integer ticketPrice) {
         this.restTicket -= ticketPrice;
+    }
+
+    public void addTicket(Integer amount) {
+        this.restTicket += amount;
     }
 }

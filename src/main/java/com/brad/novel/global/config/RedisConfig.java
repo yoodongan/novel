@@ -20,7 +20,6 @@ import java.util.Map;
 
 @Configuration
 public class RedisConfig {
-
     @Value("${spring.redis.host}")
     private String host;
 
@@ -73,6 +72,4 @@ public class RedisConfig {
                 .cacheDefaults(redisCacheConfiguration)
                 .build();
     }
-
-
 }

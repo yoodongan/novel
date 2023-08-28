@@ -13,5 +13,6 @@ import lombok.experimental.SuperBuilder;
 public class TicketChargeRequestDto {
     private Long memberId;
     private Integer amount;
+    private Integer needPoint;  // 필요한 포인트
     private Type type;
 }

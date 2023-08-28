@@ -4,6 +4,7 @@ import com.brad.novel.common.error.ResponseCode;
 import com.brad.novel.common.response.DataResponse;
 import com.brad.novel.security.dto.MemberContext;
 import com.brad.novel.transactions.dto.PointChargeRequestDto;
+import com.brad.novel.transactions.dto.TicketChargeRequestDto;
 import com.brad.novel.transactions.service.TransactionsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,14 @@ public class TransactionsApiController {
         transactionsService.addPoint(memberContext.getMember(), requestDto);
         return new DataResponse(ResponseCode.SUCCESS_201, "포인트가 정상적으로 충전되었습니다.");
     }
+
+    @PostMapping("/point/charge")
+    public DataResponse chargeTicket(@AuthenticationPrincipal MemberContext memberContext,
+                                    @RequestBody TicketChargeRequestDto requestDto) {
+        transactionsService.addTicket(memberContext.getMember(), requestDto);
+        return new DataResponse(ResponseCode.SUCCESS_201, "소장권이 정상적으로 충전되었습니다.");
+    }
+
+
 
 }
