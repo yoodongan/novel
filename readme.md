@@ -3,11 +3,11 @@
 ![](https://i.imgur.com/UxbY30n.png)
 ## REST API 설계
 
+➡️ [API 명세](https://hushed-bite-bb4.notion.site/10674566d0754dd08666da7a2b8ff188?v=e6318d3b059f48e1a7c732ff7ac42d7f)
+
 ## 진행 기간
 1차 : 2023.04.06 ~ 2023.05.02      
-2차[리팩토링] : 2023.08.23 ~ 
-
-➡️ [API 명세](https://hushed-bite-bb4.notion.site/10674566d0754dd08666da7a2b8ff188?v=e6318d3b059f48e1a7c732ff7ac42d7f)
+2차[리팩토링] : 2023.08.23 ~
 
 ## 시퀀스 다이어그램 (리팩토링 후)
 ### Spring Security, JWT를 사용한 회원가입 및 로그인
