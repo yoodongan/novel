@@ -3,8 +3,9 @@ package com.brad.novel.point.service
 
 import com.brad.novel.init.InitService
 import com.brad.novel.member.service.MemberService
-import com.brad.novel.point.dto.PointRequestDto
+import com.brad.novel.transactions.dto.PointChargeRequestDto
 import com.brad.novel.preference.service.PreferenceService
+import com.brad.novel.transactions.service.TransactionsService
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,30 +28,25 @@ class PointServiceTest extends Specification {
     @Autowired
     PreferenceService preferenceService;
     @Autowired
-    PointService pointService;
+    TransactionsService transactionsService;
 
     @Autowired
     InitService initService;
-
-    @BeforeEach
-    def setup1() {
-        initService.init1();
-    }
 
     def "동시에_2개_요청"() throws InterruptedException {
         setup:
         def memberId = 1L
         def findMember = memberService.findById(memberId)
-        PointRequestDto pointRequestDto = new PointRequestDto(memberId, 1000L);
+        PointChargeRequestDto requestDto = new PointChargeRequestDto(memberId, 1000L);
         ExecutorService executorService = Executors.newFixedThreadPool(2);
 
         // 동일 요청 2개
         executorService.execute(() -> {
-            pointService.addPoint(findMember, pointRequestDto);
+            transactionsService.addPoint(findMember, requestDto);
         });
 
         executorService.execute(() -> {
-            pointService.addPoint(findMember, pointRequestDto);
+            transactionsService.addPoint(findMember, requestDto);
         });
 
         try {

@@ -1,4 +1,4 @@
-package com.brad.novel.mychapter.controller;
+package com.brad.novel.mychapter.api;
 
 import com.brad.novel.chapter.entity.Chapter;
 import com.brad.novel.chapter.repository.ChapterRepository;
@@ -43,10 +43,4 @@ public class MyChapterApiController {
         myChapterService.buyChapter(memberContext.getMember(), chapterId);
         return DataResponse.success(ResponseCode.SUCCESS_201, "Chapter 구매에 성공했습니다.");
     }
-
-
-
-
-
-
 }

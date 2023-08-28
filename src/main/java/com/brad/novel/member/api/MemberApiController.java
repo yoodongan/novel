@@ -10,7 +10,7 @@ import com.brad.novel.member.dto.request.MemberJoinRequestDto;
 import com.brad.novel.member.dto.response.AuthorResponseDto;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.service.MemberService;
-import com.brad.novel.point.dto.PointRequestDto;
+import com.brad.novel.transactions.dto.PointChargeRequestDto;
 import com.brad.novel.point.dto.PointSuccessDto;
 import com.brad.novel.point.service.PointService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,13 +50,5 @@ public class MemberApiController {
         memberService.beAuthor(memberId, authorRequestDto);
         Member member = memberService.findById(memberId);
         return new DataResponse(ResponseCode.SUCCESS_201, new AuthorResponseDto(member.getUsername(), member.getNickname()));
-    }
-
-    @PostMapping("/{memberId}/points")
-    public DataResponse addPoint(@PathVariable Long memberId, @RequestBody PointRequestDto requestDto) {
-        Member member = memberService.findById(memberId);
-        pointService.addPoint(member, requestDto);
-        PointSuccessDto pointSuccessDto = new PointSuccessDto(memberId, requestDto.getAmount());
-        return new DataResponse(ResponseCode.SUCCESS_201, pointSuccessDto);
     }
 }

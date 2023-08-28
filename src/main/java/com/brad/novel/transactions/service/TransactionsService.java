@@ -1,11 +1,11 @@
-package com.brad.novel.point.service;
+package com.brad.novel.transactions.service;
 
 import com.brad.novel.common.exception.NovelServiceException;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.member.repository.MemberRepository;
 import com.brad.novel.transactions.dto.PointChargeRequestDto;
-import com.brad.novel.point.entity.Point;
-import com.brad.novel.point.repository.PointRepository;
+import com.brad.novel.transactions.entity.Transactions;
+import com.brad.novel.transactions.repository.TransactionsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -15,17 +15,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.brad.novel.common.error.ResponseCode.*;
+import static com.brad.novel.common.error.ResponseCode.NOT_AVAILABLE_LOCK;
+import static com.brad.novel.common.error.ResponseCode.NOT_FOUND_MEMBER;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
-public class PointService {
-    private final PointRepository pointRepository;
-    private final MemberRepository memberRepository;
-    private final RedissonClient redissonClient;
+public class TransactionsService {
 
+    private final TransactionsRepository transactionsRepository;
+    private final RedissonClient redissonClient;
+    private final MemberRepository memberRepository;
+
+    /* 포인트 충전 */
     @Transactional
     public void addPoint(Member member, PointChargeRequestDto requestDto) {
         String lockName = "charge-point" + " / " + "name: " + member.getUsername();
@@ -41,11 +43,11 @@ public class PointService {
             Member findMember = memberRepository.findById(member.getId()).orElseThrow(
                     () -> new NovelServiceException(NOT_FOUND_MEMBER)
             );
-            if (findMember == null) {
-                throw new NovelServiceException(NOT_FOUND_MEMBER);
-            }
 
             findMember.addPoint(requestDto.getAmount());
+            Transactions transactions = Transactions.toChargePointTransactions(member, requestDto);
+
+            transactionsRepository.save(transactions);
             log.info("포인트 충전 완료");
 
         } catch (InterruptedException e) {
@@ -58,27 +60,4 @@ public class PointService {
             }
         }
     }
-    /*
-    @Transactional
-    public void addPointWithoutLock(Member member, PointRequestDto requestDto) {
-
-        Member findMember = memberRepository.findById(member.getId()).orElseThrow(
-                () -> new NovelServiceException(NOT_FOUND_MEMBER)
-        );
-        findMember.addPoint(requestDto.getAmount());
-    }
-    */
-
-    public Point findByMemberId(Long memberId) {
-        return pointRepository.findByMemberId(memberId).get();
-    }
-    public void updatePoint(Long memberId, Integer amount) {
-        Point findPoint = findByMemberId(memberId);
-        findPoint.updatePoint(amount);
-    }
-
-    public Point findById(Long pointId) {
-        return pointRepository.findById(pointId).orElseThrow(() -> new NovelServiceException(NOT_FOUND_POINT));
-    }
-
 }
