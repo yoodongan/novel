@@ -3,7 +3,11 @@ package com.brad.novel.mychapter.entity;
 import com.brad.novel.base.BaseEntity;
 import com.brad.novel.chapter.entity.Chapter;
 import com.brad.novel.member.entity.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +19,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 public class MyChapter extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Chapter chapter;

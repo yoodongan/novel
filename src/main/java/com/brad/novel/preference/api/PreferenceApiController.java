@@ -47,17 +47,4 @@ public class PreferenceApiController {
         List<PreferenceNovelsResponseDto> preferenceNovels = preferenceService.getPreferenceNovelsResponseDtos(memberContext.getMember());
         return DataResponse.success(ResponseCode.SUCCESS_201, preferenceNovels);
     }
-
-
-
-    /* 1시간 간격으로 갱신, 베스트 선호 작품 조회 */
-//    @GetMapping("/preference/preferPerHour")
-//    public DataResponse getBestPreferencePerHour() {
-//        List<Object[]> bestPreferencesPerHour = preferenceService.getBestPreferencePerHour();
-//        List<BestPreferenceDto> bestPreferenceDtos = new ArrayList<>();
-//        for (Object[] objects : bestPreferencesPerHour) {
-//            bestPreferenceDtos.add(new BestPreferenceDto((Long) objects[0], (Long) objects[1]));
-//        }
-//        return new DataResponse(ResponseCode.SUCCESS_202, bestPreferenceDtos);
-//    }
 }

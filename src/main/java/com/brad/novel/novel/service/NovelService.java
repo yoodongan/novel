@@ -71,7 +71,7 @@ public class NovelService {
 
     /* 소설 검색 - 소설 제목 또는 작가 이름을 입력한다. */
     public List<NovelResponseDto> findBySearch(String target) {
-        List<Novel> novels = novelRepository.findBySubjectContainingOrAuthorNameContaining(target);
+        List<Novel> novels = novelRepository.findBySubjectContainingOrAuthorNameContaining(target, target);
         List<NovelResponseDto> novelResponseDtoList = novels.stream()
                 .map(NovelResponseDto::from)
                 .collect(Collectors.toList());

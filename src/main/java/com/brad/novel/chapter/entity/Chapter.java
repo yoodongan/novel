@@ -47,6 +47,7 @@ public class Chapter extends BaseEntity {
         this.shorts = requestDto.getShorts();
         this.content = requestDto.getShorts();
         this.pageCount = requestDto.getPageCount();
+        this.chapterSequence = requestDto.getChapterSequence();
         this.imagePath = requestDto.getImagePath();
         this.ticketPrice = requestDto.getTicketPrice();
     }

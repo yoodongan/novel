@@ -20,17 +20,17 @@ public class ChapterApiController {
     private final ChapterService chapterService;
     private final NovelService novelService;
 
-    @PostMapping("/novels/{novelId}/chapters")
+    @PostMapping(value = "/novels/{novelId}/chapters", consumes = APPLICATION_JSON_VALUE)
     public DataResponse registerChapter(@PathVariable Long novelId, @RequestBody ChapterRegisterRequestDto requestDto) {
         Long chapterId = chapterService.registerChapter(novelId, requestDto);
         return new DataResponse(ResponseCode.SUCCESS_201, "Chapter 가 성공적으로 저장되었습니다.");
     }
-    @PostMapping("/novels/{novelId}/chapters/{chapterId}")
+    @PutMapping(value = "/novels/{novelId}/chapters/{chapterId}", consumes = APPLICATION_JSON_VALUE)
     public DataResponse modifyChapter(@PathVariable Long novelId, @PathVariable Long chapterId, @RequestBody ChapterModifyRequestDto requestDto) {
         chapterService.modifyChapter(novelId, chapterId, requestDto);
         return new DataResponse(ResponseCode.SUCCESS_201, "Chapter 가 성공적으로 수정되었습니다.");
     }
-    @PostMapping("/novels/{novelId}/chapters/{chapterId}")
+    @DeleteMapping("/novels/{novelId}/chapters/{chapterId}")
     public DataResponse deleteChapter(@PathVariable Long novelId, @PathVariable Long chapterId) {
         chapterService.deleteChapter(chapterId);
         return new DataResponse(ResponseCode.SUCCESS_201, "Chapter 가 성공적으로 삭제되었습니다.");

@@ -9,7 +9,7 @@ import java.util.List;
 public interface NovelRepository extends JpaRepository<Novel, Long> {
     List<Novel> findAllByOrderByLikeScoreDesc();
 
-    List<Novel> findBySubjectContainingOrAuthorNameContaining(String target);
+    List<Novel> findBySubjectContainingOrAuthorNameContaining(String subject, String author);
 
     List<Novel> findByGenre(Genre genre);
 }

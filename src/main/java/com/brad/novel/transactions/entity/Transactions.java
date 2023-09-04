@@ -4,7 +4,11 @@ import com.brad.novel.base.BaseEntity;
 import com.brad.novel.member.entity.Member;
 import com.brad.novel.transactions.dto.PointChargeRequestDto;
 import com.brad.novel.transactions.dto.TicketChargeRequestDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -13,7 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 public class Transactions extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
